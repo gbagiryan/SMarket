@@ -1,0 +1,20 @@
+.app-wrapper {
+    display: grid;
+    grid-template-areas: 'header' 'main' 'footer';
+    grid-template-columns: 1fr;
+    grid-template-rows: 5rem 1fr 5rem;
+    height: 100%;
+}
+
+.main-area{
+    grid-area: main;
+    display: grid;
+    grid-template-areas: 'sidebar' 'content-area';
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 5fr;
+}
+.content-area{
+    background-color: lightgray;
+    margin: 1rem;
+    padding: 1rem;
+}
