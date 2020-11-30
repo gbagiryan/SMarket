@@ -3,7 +3,7 @@ import styles from './SideBar.module.css';
 import {NavLink} from "react-router-dom";
 import noAvatar from '../../assets/images/noAvatar.png';
 
-export const SideBar = () => {
+export const SideBar = React.memo((props) => {
     return (
         <div className={styles.sideBar}>
             <div className={styles.avatarContainer}>
@@ -26,4 +26,4 @@ export const SideBar = () => {
             </div>
         </div>
     )
-}
+});

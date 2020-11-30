@@ -1,25 +1,35 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
-
 import {SideBar} from "./components/SideBar/SideBar";
 import {BrowserRouter, Route} from "react-router-dom";
-import {Login} from "./components/Login/Login";
 import {Main} from "./components/Main/Main";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import {Footer} from "./components/Footer/Footer";
-import {Header} from "./components/Header/Header";
+import LoginContainer from "./components/Login/LoginContainer";
+import HeaderContainer from "./components/Header/HeaderContainer";
+import Loading from "./components/Common/Loading/Loading";
+import {connect} from "react-redux";
+import {initializeApp} from "./redux/reducers/AppReducer";
 
-function App() {
+const App = (props) => {
+
+    useEffect(() => {
+        props.initializeApp();
+    }, [props.isAuthed]);
+
+    if (!props.initialized) {
+        return <Loading/>
+    }
     return (
         <BrowserRouter>
             <div className='app-wrapper'>
-                <Header/>
+                <HeaderContainer/>
                 <div className='main-area'>
                     <SideBar/>
                     <div className='content-area'>
-                        <Route exact path='/' render={Main}/>
-                        <Route path='/login' render={Login}/>
-                        <Route path='/profile' render={ProfileContainer}/>
+                        <Route exact path='/' component={Main}/>
+                        <Route path='/login' component={LoginContainer}/>
+                        <Route path='/profile/:userId?' component={ProfileContainer}/>
                     </div>
                 </div>
                 <Footer/>
@@ -28,4 +38,35 @@ function App() {
     );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+    initialized: state.app.initialized,
+    isAuthed: state.auth.isAuthed
+});
+
+const actionCreators = {
+    initializeApp
+};
+
+export default connect(mapStateToProps, actionCreators)(App);
+
+
+// const App = () => {
+//     return (
+//         <BrowserRouter>
+//             <div className='app-wrapper'>
+//                 <HeaderContainer/>
+//                 <div className='main-area'>
+//                     <SideBar/>
+//                     <div className='content-area'>
+//                         <Route exact path='/' component={Main}/>
+//                         <Route path='/login' component={LoginContainer}/>
+//                         <Route path='/profile/:userId?' component={ProfileContainer}/>
+//                     </div>
+//                 </div>
+//                 <Footer/>
+//             </div>
+//         </BrowserRouter>
+//     );
+// };
+//
+// export default App;
