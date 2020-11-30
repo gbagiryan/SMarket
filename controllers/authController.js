@@ -1,24 +1,23 @@
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import config from 'config';
 
 const login_post = async (req, res) => {
     try {
         const {email, password} = req.body;
-
         const user = await User.findOne({email});
+
         if (!user) {
-            res.status(400).json({message: "wrong email", email});
+            return res.status(400).json({message:'email doesn\'t exist'});
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            res.status(400).json({message: "wrong password"});
+            return res.status(400).json({message:'wrong password'});
         }
         const token = jwt.sign(
             {userId: user.id},
-            config.get('jwtSecret'),
+            process.env.JWT_SECRET,
             {expiresIn: '1h'}
         )
         res.cookie('jwt', token, {
@@ -27,17 +26,16 @@ const login_post = async (req, res) => {
         res.status(200).json({user: user._id});
 
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json(err.message);
     }
 };
 
 const register_post = async (req, res) => {
     try {
         const {email, password, firstName, lastName} = req.body;
-
         const candidate = await User.findOne({email});
         if (candidate) {
-            res.status(400).json({message: "email exists"})
+            return res.status(400).json({message:'email exists'});
         }
         const hashedPassword = await bcrypt.hash(password, 12);
         const user = new User({email, password: hashedPassword, firstName, lastName, role: 'user'});
@@ -46,27 +44,31 @@ const register_post = async (req, res) => {
         res.status(201).json({message: "registration successful"});
 
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json(err.message);
     }
 };
 
 const logout_get = (req, res) => {
-    res.clearCookie('jwt');
-    res.status(200).json({success: true});
+    try {
+        res.clearCookie('jwt');
+        res.status(200).json({success: true});
+    }catch (err) {
+        res.status(500).json(err.message);
+    }
 }
 
 const isUserAuthed = (req, res) => {
     const token = req.cookies.jwt;
     if (!token) {
-        res.status(401);
+        return res.json(false);
     }
     try {
-        jwt.verify(token, config.get('jwtSecret'), async (err, decodedToken) => {
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
-                res.status(401);
+                return res.status(400).json({message:'unauthorized'});
             } else {
                 const user = await User.findOne({id: decodedToken.id});
-                res.status(200).json({
+                res.json({
                     id: user.id,
                     email: user.email,
                     firstName: user.firstName,
@@ -76,7 +78,7 @@ const isUserAuthed = (req, res) => {
         });
 
     } catch (err) {
-        res.status(400).json(err.message);
+        res.status(400).json(false, err.message);
     }
 };
 

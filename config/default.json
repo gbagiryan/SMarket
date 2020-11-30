@@ -1,5 +1,0 @@
-{
-  "port": 5000,
-  "mongoUri": "mongodb+srv://gbagiryan:g077165324g@cluster0.7r42f.mongodb.net/smarket?retryWrites=true&w=majority",
-  "jwtSecret": "ipnBu6WWu7cqz6S2NMJI"
-}

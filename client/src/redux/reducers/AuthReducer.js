@@ -18,15 +18,11 @@ export const AuthReducer = (state = {}, action) => {
 const setAuthedUserData = (authedUserData, isAuthed) => ({type: AUTH_SET_AUTHED_USER_ID, authedUserData, isAuthed});
 
 export const verifyAuth = () => async (dispatch) => {
-    try {
-        const result = await authApi.verifyAuth();
-        if (result.status === 200) {
-            dispatch(setAuthedUserData(result.data, true));
-        }else{
-            dispatch(setAuthedUserData(null, false));
-        }
-    }catch (e) {
-        console.log("ERROR" + e.message)
+    const result = await authApi.verifyAuth();
+    if (!result.data === false) {
+        dispatch(setAuthedUserData(result.data, true));
+    } else {
+        dispatch(setAuthedUserData(null, false));
     }
 
 };

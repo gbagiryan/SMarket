@@ -11,15 +11,31 @@ export const profileApi = {
 }
 export const authApi = {
     async login(email, password) {
-        return await Axios.post('/api/auth/login', {email, password});
+        try {
+            return await Axios.post('/api/auth/login', {email, password});
+        } catch (e) {
+            console.log('ОШИБКА! '+e.message);
+        }
     },
     async register(email, password, firstName, lastName) {
-        return await Axios.post('/api/auth/register', {email, password, firstName, lastName});
+        try {
+            return await Axios.post('/api/auth/register', {email, password, firstName, lastName});
+        } catch (e) {
+            console.log('ОШИБКА! '+e.message);
+        }
     },
     async verifyAuth() {
-        return await Axios.post('/api/auth/verifyAuth');
+        try {
+            return await Axios.post('/api/auth/verifyAuth');
+        } catch (e) {
+            console.log('ОШИБКА! '+e.message);
+        }
     },
     async logout() {
-        return await Axios.get('/api/auth/logout');
+        try {
+            return await Axios.get('/api/auth/logout');
+        } catch (e) {
+            console.log('ОШИБКА! '+e.message);
+        }
     }
 }
