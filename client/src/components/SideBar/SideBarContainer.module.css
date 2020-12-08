@@ -1,0 +1,7 @@
+.sideBar {
+    grid-area: sidebar;
+    background-color: lightgray;
+    margin: 1rem;
+    margin-right: 0;
+    padding: 1rem;
+}

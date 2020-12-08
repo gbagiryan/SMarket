@@ -18,22 +18,27 @@ export const AuthReducer = (state = {}, action) => {
 const setAuthedUserData = (authedUserData, isAuthed) => ({type: AUTH_SET_AUTHED_USER_ID, authedUserData, isAuthed});
 
 export const verifyAuth = () => async (dispatch) => {
-    const result = await authApi.verifyAuth();
-    if (!result.data === false) {
-        dispatch(setAuthedUserData(result.data, true));
+    const res = await authApi.verifyAuth();
+    if (!res.data === false) {
+        dispatch(setAuthedUserData(res.data, true));
     } else {
         dispatch(setAuthedUserData(null, false));
     }
 
 };
+
 export const login = (email, password) => async (dispatch) => {
-    await authApi.login(email, password);
-    dispatch(verifyAuth());
+    const res = await authApi.login(email, password);
+    if (res.status===200) {
+        dispatch(setAuthedUserData(res.data, true));
+    } else {
+        dispatch(setAuthedUserData(null, false));
+    }
 }
 export const logout = () => async (dispatch) => {
     await authApi.logout();
     dispatch(setAuthedUserData(null, false));
 }
-export const register = (email, password, firstName, lastName) => async (dispatch) => {
-    await authApi.register(email, password, firstName, lastName);
+export const register = (email, username, password, firstName, lastName) => async (dispatch) => {
+    await authApi.register(email, username, password, firstName, lastName);
 }

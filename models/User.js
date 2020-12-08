@@ -9,6 +9,16 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    profileId: {
+        type: String,
+        required: true,
+        unique: true
+    },
     email: {
         type: String,
         required: true,
@@ -25,7 +35,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     cart: [{type: mongoose.Schema.Types.ObjectID, ref: 'Product'}],
-    items: [{type: mongoose.Schema.Types.ObjectID, ref: 'Product'}]
+    products: [{type: mongoose.Schema.Types.ObjectID, ref: 'Product'}]
 });
 
 export default mongoose.model('User', userSchema);

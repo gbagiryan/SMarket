@@ -1,21 +1,24 @@
 import React, {useEffect} from 'react';
 import './App.css';
-import {SideBar} from "./components/SideBar/SideBar";
 import {BrowserRouter, Route} from "react-router-dom";
-import {Main} from "./components/Main/Main";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import {Footer} from "./components/Footer/Footer";
-import LoginContainer from "./components/Login/LoginContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Loading from "./components/Common/Loading/Loading";
 import {connect} from "react-redux";
 import {initializeApp} from "./redux/reducers/AppReducer";
+import AuthedUserProfileContainer from "./components/AuthedUserProfile/AuthedUserProfileContainer";
+import SideBarContainer from "./components/SideBar/SideBarContainer";
+import RegisterContainer from "./components/Register/RegisterContainer";
+import AddListingContainer from "./components/AddListing/AddListingContainer";
+import ProductContainer from "./components/Product/ProductContainer";
+import MainContainer from "./components/Main/MainContainer";
 
 const App = (props) => {
 
     useEffect(() => {
         props.initializeApp();
-    }, [props.isAuthed]);
+    }, []);
 
     if (!props.initialized) {
         return <Loading/>
@@ -25,11 +28,14 @@ const App = (props) => {
             <div className='app-wrapper'>
                 <HeaderContainer/>
                 <div className='main-area'>
-                    <SideBar/>
+                    <SideBarContainer/>
                     <div className='content-area'>
-                        <Route exact path='/' component={Main}/>
-                        <Route path='/login' component={LoginContainer}/>
-                        <Route path='/profile/:userId?' component={ProfileContainer}/>
+                        <Route exact path='/' component={MainContainer}/>
+                        <Route exact path='/add_new_listing' component={AddListingContainer}/>
+                        <Route path='/register' component={RegisterContainer}/>
+                        <Route path='/user/:userId' component={ProfileContainer}/>
+                        <Route path='/product/:productId' component={ProductContainer}/>
+                        <Route exact path='/profile' component={AuthedUserProfileContainer}/>
                     </div>
                 </div>
                 <Footer/>
@@ -48,25 +54,3 @@ const actionCreators = {
 };
 
 export default connect(mapStateToProps, actionCreators)(App);
-
-
-// const App = () => {
-//     return (
-//         <BrowserRouter>
-//             <div className='app-wrapper'>
-//                 <HeaderContainer/>
-//                 <div className='main-area'>
-//                     <SideBar/>
-//                     <div className='content-area'>
-//                         <Route exact path='/' component={Main}/>
-//                         <Route path='/login' component={LoginContainer}/>
-//                         <Route path='/profile/:userId?' component={ProfileContainer}/>
-//                     </div>
-//                 </div>
-//                 <Footer/>
-//             </div>
-//         </BrowserRouter>
-//     );
-// };
-//
-// export default App;

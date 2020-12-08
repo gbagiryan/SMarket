@@ -1,27 +1,21 @@
 import React from 'react';
 import {LoginReduxForm} from "./LoginForm";
 import {connect} from "react-redux";
-import {login,register} from "../../redux/reducers/AuthReducer";
-import {RegisterReduxForm} from "./RegisterForm";
+import {login} from "../../redux/reducers/AuthReducer";
+import {NavLink} from "react-router-dom";
 
 const LoginContainer = (props) => {
 
     const onLoginSubmit = (formData) => {
         props.login(formData.email, formData.password)
     }
-    const onRegisterSubmit = (formData) => {
-        props.register(formData.email, formData.password, formData.firstName, formData.lastName)
-    }
 
     return (
         <div>
-            <h1>LOGIN PAGE</h1>
             <div>
                 <LoginReduxForm onSubmit={onLoginSubmit}/>
             </div>
-            <div>
-                <RegisterReduxForm onSubmit={onRegisterSubmit}/>
-            </div>
+            <NavLink to={'/register'}>Create account</NavLink>
         </div>
     )
 };
@@ -29,8 +23,7 @@ const LoginContainer = (props) => {
 const mapStateToProps = (state) => ({});
 
 const actionCreators = {
-    login,
-    register
+    login
 }
 
 export default connect(mapStateToProps, actionCreators)(LoginContainer);

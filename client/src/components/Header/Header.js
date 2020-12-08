@@ -17,8 +17,8 @@ export const Header = (props) => {
                         <button onClick={props.logout}>Logout</button>
                     </div>
 
-                    : <NavLink to={'/login'} activeClassName={styles.active} className={styles.item}>
-                        Login
+                    : <NavLink to={'/register'} activeClassName={styles.active} className={styles.item}>
+                        Register
                     </NavLink>
                 }
             </div>

@@ -2,16 +2,15 @@ import React, {useEffect} from 'react';
 import {Profile} from "./Profile";
 import {connect} from "react-redux";
 import {getUserProfile} from "../../redux/reducers/ProfileReducer";
+import {getProfile} from "../../redux/selectors/profileSelectors";
+import {compose} from "redux";
 
 const ProfileContainer = React.memo((props) => {
 
     useEffect(() => {
         let userId = props.match.params.userId;
-        if (!userId) {
-            userId = props.authedUserId;
-        }
-
         props.getUserProfile(userId);
+
     }, [props.match.params.userId])
 
     return (
@@ -22,12 +21,13 @@ const ProfileContainer = React.memo((props) => {
 });
 
 const mapStateToProps = (state) => ({
-    authedUserId: state.auth.authedUserId,
-    profile: state.profileReducer.profile
+    profile: getProfile(state)
 });
 
 const actionCreators = {
     getUserProfile
 };
 
-export default connect(mapStateToProps, actionCreators)(ProfileContainer);
+export default compose(
+    connect(mapStateToProps, actionCreators)
+)(ProfileContainer);

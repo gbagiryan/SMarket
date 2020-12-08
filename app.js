@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/authRoutes.js';
+import profileRoutes from './routes/profileRoutes.js';
+import productRoutes from './routes/productRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -19,6 +21,8 @@ app.use(express.urlencoded({extended: true, limit: '30mb'}))
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/product', productRoutes);
+app.use('/api/profile', profileRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,

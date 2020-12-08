@@ -4,10 +4,12 @@ import thunkMiddleware from 'redux-thunk';
 import {reducer as formReducer} from 'redux-form';
 import {AuthReducer} from "./reducers/AuthReducer";
 import {AppReducer} from "./reducers/AppReducer";
+import {ProductReducer} from "./reducers/ProductReducer";
 
 
 let reducers = combineReducers({
     profileReducer: ProfileReducer,
+    productReducer: ProductReducer,
     auth: AuthReducer,
     app: AppReducer,
     form: formReducer

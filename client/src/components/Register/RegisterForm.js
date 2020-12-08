@@ -9,6 +9,9 @@ const RegisterForm = (props) => {
                     <Field placeholder={'Email'} name={'email'} component={'input'} type="email"/>
                 </div>
                 <div>
+                    <Field placeholder={'Username'} name={'username'} component={'input'}/>
+                </div>
+                <div>
                     <Field placeholder={'Password'} name={'password'} component={'input'} type="password"/>
                 </div>
                 <div>

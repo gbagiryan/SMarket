@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import {Header} from "./Header";
 import {logout} from "../../redux/reducers/AuthReducer";
+import {getIsAuthed} from "../../redux/selectors/authSelectors";
 
 export const HeaderContainer = React.memo((props) => {
     return (
@@ -12,7 +13,7 @@ export const HeaderContainer = React.memo((props) => {
 });
 
 const mapStateToProps = (state) => ({
-    isAuthed: state.auth.isAuthed
+    isAuthed: getIsAuthed(state)
 });
 
 const actionCreators = {

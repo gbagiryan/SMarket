@@ -14,9 +14,11 @@ export const ProfileReducer = (state = {}, action) => {
     }
 };
 
-const setUserProfile = (profile) => ({type: PROFILE_SET_PROFILE, profile});
+export const setUserProfile = (profile) => ({type: PROFILE_SET_PROFILE, profile});
 
 export const getUserProfile = (userId) => async (dispatch) => {
-    const profile = await profileApi.getUserProfile(userId);
-    dispatch(setUserProfile(profile));
+    const res = await profileApi.getUserProfile(userId);
+    if (res && res.data) {
+        dispatch(setUserProfile(res.data));
+    }
 };
