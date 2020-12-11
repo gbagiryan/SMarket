@@ -14,7 +14,13 @@ export const Main = (props) => {
                     <ProductPreview product={product} key={product._id}/>
                 )}
             </div>
-            <button onClick={props.loadMore}>Load More</button>
+            <div>
+                {props.isLoading
+                    ? <Loading/>
+                    : (props.productsCount - props.productList.length > 0)
+                        ? <button onClick={props.loadMore}>Load More</button>
+                        : <h2>no more products to show</h2>}
+            </div>
         </div>
     )
 };

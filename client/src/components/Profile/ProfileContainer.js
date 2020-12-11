@@ -5,7 +5,7 @@ import {getUserProfile} from "../../redux/reducers/ProfileReducer";
 import {getProfile} from "../../redux/selectors/profileSelectors";
 import {compose} from "redux";
 
-const ProfileContainer = React.memo((props) => {
+const ProfileContainer = (props) => {
 
     useEffect(() => {
         let userId = props.match.params.userId;
@@ -18,7 +18,7 @@ const ProfileContainer = React.memo((props) => {
             <Profile profile={props.profile}/>
         </div>
     );
-});
+};
 
 const mapStateToProps = (state) => ({
     profile: getProfile(state)

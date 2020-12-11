@@ -6,7 +6,8 @@ const login_post = async (req, res) => {
     try {
         const {email, password} = req.body;
         const user = await User.findOne({email})
-            .populate('products', 'cart');
+            .populate('products')
+            .populate('cart');
 
         if (!user) {
             return res.status(400).json({message: 'email doesn\'t exist'});

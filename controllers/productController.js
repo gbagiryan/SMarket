@@ -8,7 +8,7 @@ const add_product_post = async (req, res) => {
             description,
             price,
             category,
-            userId: req.user._id,
+            user: req.user._id,
         });
 
         await product.save();
@@ -27,11 +27,13 @@ const product_list_post = async (req, res) => {
         const skip = req.body.skip;
         const limit = req.body.limit ? req.body.limit : 10;
 
+        const productsCount = await Product.countDocuments();
         const products = await Product.find()
             .skip(skip)
-            .limit(limit);
+            .limit(limit)
+            .populate('user', 'username profileId');
 
-        res.json(products);
+        res.json({products, productsCount});
     } catch (err) {
         res.status(500).json(err.message);
     }
@@ -40,19 +42,14 @@ const product_list_post = async (req, res) => {
 const single_products_get = async (req, res) => {
     try {
         const productId = req.params.productId;
-        const product = await Product.findById(productId);
+        const product = await Product.findById(productId)
+            .populate('user', 'username profileId');
 
         if (!product) {
             return res.status(400).json({message: "product not found"});
         }
 
-        res.status(200).json({
-            productName: product.productName,
-            description: product.description,
-            price: product.price,
-            category: product.category,
-            userId: product.userId
-        });
+        res.status(200).json(product);
 
     } catch (err) {
         res.status(500).json(err.message);
