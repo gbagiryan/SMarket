@@ -11,7 +11,9 @@ export const SideBar = React.memo((props) => {
             {props.isAuthed
                 ? <div className={styles.avatarContainer}>
                     <NavLink exact to={'/profile'}>
-                        <img alt={'userAvatar'} src={noAvatar} className={styles.avatar}/>
+                        {props.authedUserData.profilePicture
+                            ? <img alt={'userAvatar'} src={props.authedUserData.profilePicture} className={styles.avatar}/>
+                            : <img alt={'userAvatar'} src={noAvatar} className={styles.avatar}/>}
                     </NavLink>
                 </div>
                 : <div className={styles.sideBar}>

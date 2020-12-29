@@ -3,6 +3,7 @@ import {Field, reduxForm} from "redux-form";
 
 const RegisterForm = (props) => {
     return (
+
         <div>
             <form onSubmit={props.handleSubmit}>
                 <div>

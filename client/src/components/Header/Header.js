@@ -1,13 +1,13 @@
 import React from 'react';
-import styles from './Header.module.css';
-import {NavLink} from "react-router-dom";
+import {NavLink, Link} from "react-router-dom";
+import styles from './Header.module.css'
 
 export const Header = (props) => {
     return (
         <div className={styles.header}>
-            <NavLink exact to={'/'} className={styles.logo}>
+            <Link exact to={'/'} className={styles.logo}>
                 SMarket
-            </NavLink>
+            </Link>
             <div className={styles.loginBlock}>
                 {props.isAuthed
                     ? <div>

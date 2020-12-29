@@ -1,7 +1,7 @@
 import React from 'react';
 import {Field, reduxForm} from "redux-form";
 
-const AddListingForm = (props) => {
+const PostProductForm = (props) => {
     return (
         <div>
             <form onSubmit={props.handleSubmit}>
@@ -24,4 +24,4 @@ const AddListingForm = (props) => {
     )
 };
 
-export const AddListingReduxForm = reduxForm({form: 'addListing'})(AddListingForm);
+export const PostProductReduxForm = reduxForm({form: 'postProduct'})(PostProductForm);

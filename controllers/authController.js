@@ -6,16 +6,24 @@ const login_post = async (req, res) => {
     try {
         const {email, password} = req.body;
         const user = await User.findOne({email})
-            .populate('products')
+            .populate([
+                {
+                    path: 'products',
+                    populate: {
+                        path: 'user',
+                        select: 'username profileId',
+                    }
+                },
+            ])
             .populate('cart');
 
         if (!user) {
-            return res.status(400).json({message: 'email doesn\'t exist'});
+            return res.status(400).json({errorMessage: 'wrong credentials'});
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({message: 'wrong password'});
+            return res.status(400).json({errorMessage: 'wrong credentials'});
         }
         const token = jwt.sign(
             {userId: user.id},
@@ -26,17 +34,20 @@ const login_post = async (req, res) => {
             httpOnly: true, sameSite: true, maxAge: 60 * 60 * 1000
         });
         res.status(200).json({
-            id: user.profileId,
-            username: user.username,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
+            user:{
+                id: user.profileId,
+                username: user.username,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                profilePicture: user.profilePicture,
+            },
             products: user.products,
             cart: user.cart
         });
 
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({errorMessage: "Server Error"});
     }
 };
 
@@ -45,7 +56,7 @@ const register_post = async (req, res) => {
         const {email, username, password, firstName, lastName} = req.body;
         const candidate = await User.findOne({email});
         if (candidate) {
-            return res.status(400).json({message: 'email exists'});
+            return res.status(400).json({errorMessage: 'email exists'});
         }
         const hashedPassword = await bcrypt.hash(password, 12);
         const user = new User({
@@ -54,45 +65,92 @@ const register_post = async (req, res) => {
             username,
             profileId: username,
             firstName,
-            lastName,
-            role: 'user'
+            lastName
         });
         await user.save();
 
-        res.status(201).json({message: "registration successful"});
+        res.status(200).json({successMessage: "registration successful"});
 
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({errorMessage: "Server Error"});
+    }
+};
+
+const editProfile_patch = async (req, res) => {
+    try {
+        const {email, username, firstName, lastName} = req.body;
+        const file = req.file;
+
+        const existingEmail = await User.findOne({email});
+        const existingUsername = await User.findOne({username});
+
+        if (email !== req.user.email && existingEmail) {
+            return res.status(400).json({errorMessage: 'email already taken'});
+        }
+        if (username !== req.user.username && existingUsername) {
+            return res.status(400).json({errorMessage: 'username already taken'});
+        }
+        const editedUser = await User.findOneAndUpdate({_id: req.user._id}, {
+            email,
+            username,
+            firstName,
+            lastName,
+            profilePicture: file ? '/public/' + file.filename : null
+        }, {new: true})
+
+        res.status(200).json({
+            successMessage: "registration successful",
+            user: {
+                username: editedUser.username,
+                email: editedUser.email,
+                firstName: editedUser.firstName,
+                lastName: editedUser.lastName,
+                profilePicture: editedUser.profilePicture
+            }
+        });
+    } catch (err) {
+        res.status(500).json({errorMessage: "Server Error"});
     }
 };
 
 const logout_get = (req, res) => {
     try {
         res.clearCookie('jwt');
-        res.status(200).json({success: true});
+        res.status(200);
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({errorMessage: "Server Error"});
     }
 }
-
 const isUserAuthed = (req, res) => {
     const token = req.cookies.jwt;
     if (!token) {
-        return res.json(false);
+        return res.status(200).json(false);;
     }
     try {
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
-                return res.status(400).json({message: 'unauthorized'});
+                return res.status(400).json({errorMessage: 'unauthorized'});
             } else {
                 const user = await User.findOne({_id: decodedToken.userId})
-                    .populate('products');
-                res.json({
-                    id: user.profileId,
-                    username: user.username,
-                    email: user.email,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
+                    .populate([
+                        {
+                            path: 'products',
+                            populate: {
+                                path: 'user',
+                                select: 'username profileId',
+                            }
+                        },
+                    ])
+                    .populate('cart');
+                res.status(200).json({
+                    user:{
+                        id: user.profileId,
+                        username: user.username,
+                        email: user.email,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        profilePicture: user.profilePicture,
+                    },
                     products: user.products,
                     cart: user.cart
                 });
@@ -100,7 +158,7 @@ const isUserAuthed = (req, res) => {
         });
 
     } catch (err) {
-        res.status(400).json(false, err.message);
+        res.status(500).json({errorMessage: "Server Error"});
     }
 };
 
@@ -108,5 +166,6 @@ export default {
     login_post,
     register_post,
     logout_get,
-    isUserAuthed
+    isUserAuthed,
+    editProfile_patch
 };

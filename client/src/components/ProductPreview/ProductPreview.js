@@ -5,7 +5,7 @@ const ProductPreview = (props) => {
 
     return (
         <div>
-            <div>{props.product.productName}</div>
+            <NavLink to={`/product/${props.product._id}`}>{props.product.productName}</NavLink>
             <div>{props.product.description}</div>
             <div>{props.product.price}</div>
             <div>{props.product.category}</div>

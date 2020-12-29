@@ -5,26 +5,24 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/authRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-//disable caching
-app.use((req, res, next) => {
-    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private')
-    next()
-});
-
 app.use(express.json({extended: true, limit: '30mb'}));
-app.use(express.urlencoded({extended: true, limit: '30mb'}))
+app.use(express.urlencoded({extended: true, limit: '30mb'}));
 app.use(cookieParser());
+app.use('/public', express.static('uploads'));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/cart', cartRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
+    useFindAndModify: false,
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true

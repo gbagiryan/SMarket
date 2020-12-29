@@ -2,64 +2,47 @@ import Axios from "axios";
 
 export const profileApi = {
     async getUserProfile(userId) {
-        try {
-            return await Axios.get(`/api/profile/get_profile/${userId}`);
-        } catch (e) {
-            console.log(e.message);
-        }
+        return await Axios.get(`/api/profile/get_profile/${userId}`);
     }
 };
 export const productApi = {
-    async addNewListing(product) {
-        try {
-            return await Axios.post(`/api/product/add_new_product/`, product);
-        } catch (e) {
-            console.log(e.message);
-        }
-    },
     async requestProduct(productId) {
-        try {
-            return await Axios.get(`/api/product/get_product/${productId}`);
-        } catch (e) {
-            console.log(e.message);
-        }
+        return await Axios.get(`/api/product/get_product/${productId}`);
     },
     async requestProductList(skip, limit) {
-        try {
-            return await Axios.post(`/api/product/get_product_list`, {skip, limit});
-        } catch (e) {
-            console.log(e.message);
-        }
+        return await Axios.post(`/api/product/get_product_list`, {skip, limit});
     }
 };
 
 export const authApi = {
     async login(email, password) {
-        try {
-            return await Axios.post('/api/auth/login', {email, password});
-        } catch (e) {
-            console.log(e.message);
-        }
+        return await Axios.post('/api/auth/login', {email, password});
     },
     async register(email, username, password, firstName, lastName) {
-        try {
-            return await Axios.post('/api/auth/register', {email, username, password, firstName, lastName});
-        } catch (e) {
-            console.log(e.message);
-        }
+        return await Axios.post('/api/auth/register', {email, username, password, firstName, lastName});
     },
     async verifyAuth() {
-        try {
-            return await Axios.get('/api/auth/verifyAuth');
-        } catch (e) {
-            console.log(e.message);
-        }
+        return await Axios.get('/api/auth/verifyAuth');
     },
     async logout() {
-        try {
-            return await Axios.get('/api/auth/logout');
-        } catch (e) {
-            console.log(e.message);
-        }
+        return await Axios.get('/api/auth/logout');
+    },
+    async editProfile(formData) {
+        return await Axios.patch(`/api/auth/edit_profile`, formData);
+    },
+    async addNewListing(product) {
+        return await Axios.post(`/api/product/add_new_product/`, product);
+    },
+    async deleteProduct(productId) {
+        return await Axios.post(`/api/product/delete_product/`, {productId});
+    },
+    async deleteFromCart(productId) {
+        return await Axios.post(`/api/cart/delete_from_cart`, {productId});
+    },
+    async addToCart(productId) {
+        return await Axios.post(`/api/cart/add_to_cart`, {productId});
+    },
+    async editProduct(formData) {
+        return await Axios.patch(`/api/product/edit_product`, formData);
     }
 }

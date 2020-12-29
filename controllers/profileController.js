@@ -6,11 +6,11 @@ const profile_get = async (req, res) => {
         const user = await User.findOne({profileId: paramsId})
             .select('-password')
             .populate('products');
-        if (!user){
-            return res.status(400).json({message: 'no user with this id'});
+        if (!user) {
+            return res.status(400).json({errorMessage: 'no user with this id'});
         }
 
-        res.json({
+        res.status(200).json({
             id: user.profileId,
             username: user.username,
             email: user.email,
@@ -18,8 +18,8 @@ const profile_get = async (req, res) => {
             lastName: user.lastName,
             products: user.products
         });
-    }catch (err) {
-        res.status(500).json(err.message);
+    } catch (err) {
+        res.status(500).json({errorMessage: "Server Error"});
     }
 }
 

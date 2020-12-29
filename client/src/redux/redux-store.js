@@ -8,8 +8,8 @@ import {ProductReducer} from "./reducers/ProductReducer";
 
 
 let reducers = combineReducers({
-    profileReducer: ProfileReducer,
-    productReducer: ProductReducer,
+    profile: ProfileReducer,
+    product: ProductReducer,
     auth: AuthReducer,
     app: AppReducer,
     form: formReducer

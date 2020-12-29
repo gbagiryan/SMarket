@@ -2,20 +2,20 @@ import React from 'react';
 import {connect} from "react-redux";
 import {compose} from "redux";
 import {withAuthRedirect} from "../../HOCs/withAuthRedirect";
-import {AddListingReduxForm} from "./AddListingForm";
-import {addNewListing} from "../../redux/reducers/ProductReducer";
+import {PostProductReduxForm} from "./PostProductForm";
+import {postProduct} from "../../redux/reducers/AuthReducer";
 
-const AddListingContainer = (props) => {
+const PostProductContainer = (props) => {
 
     const onAddListingSubmit = (formData) => {
-        props.addNewListing(formData);
+        props.postProduct(formData);
     }
 
     return (
         <div>
             <h1>Add new listing</h1>
             <div>
-                <AddListingReduxForm onSubmit={onAddListingSubmit}/>
+                <PostProductReduxForm onSubmit={onAddListingSubmit}/>
             </div>
         </div>
     )
@@ -24,10 +24,10 @@ const AddListingContainer = (props) => {
 const mapStateToProps = (state) => ({});
 
 const actionCreators = {
-    addNewListing
+    postProduct
 }
 
 export default compose(
     connect(mapStateToProps, actionCreators),
     withAuthRedirect
-)(AddListingContainer);
+)(PostProductContainer);

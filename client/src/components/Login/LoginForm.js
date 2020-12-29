@@ -1,5 +1,6 @@
 import React from 'react';
 import {Field, reduxForm} from "redux-form";
+import {NavLink} from "react-router-dom";
 
 const LoginForm = (props) => {
     return (
@@ -12,6 +13,7 @@ const LoginForm = (props) => {
                     <Field placeholder={'Password'} name={'password'} component={'input'} type="password"/>
                 </div>
                 <button>Login</button>
+                <NavLink to={'/register'}>Register</NavLink>
             </form>
         </div>
     )

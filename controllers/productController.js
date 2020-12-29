@@ -1,4 +1,6 @@
 import Product from "../models/Product.js";
+import mongoose from 'mongoose';
+import User from "../models/User.js";
 
 const add_product_post = async (req, res) => {
     try {
@@ -13,12 +15,13 @@ const add_product_post = async (req, res) => {
 
         await product.save();
 
-        req.user.items.push(product);
+        req.user.products.push(product);
+
         await req.user.save();
 
-        res.status(200).json({message: "listing added"});
+        res.status(200).json({successMessage: 'Product added', addedProduct: product});
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({errorMessage: "Server Error"});
     }
 };
 
@@ -33,51 +36,115 @@ const product_list_post = async (req, res) => {
             .limit(limit)
             .populate('user', 'username profileId');
 
-        res.json({products, productsCount});
+        res.status(200).json({products, productsCount});
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({errorMessage: "Server Error"});
     }
 
 }
 const single_products_get = async (req, res) => {
     try {
         const productId = req.params.productId;
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({errorMessage: 'not a valid product id'});
+        }
         const product = await Product.findById(productId)
             .populate('user', 'username profileId');
 
         if (!product) {
-            return res.status(400).json({message: "product not found"});
+            return res.status(400).json({errorMessage: "product not found"});
         }
 
-        res.status(200).json(product);
+        res.status(200).json({product});
 
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({errorMessage: "Server Error"});
     }
 }
 
 const delete_product_post = async (req, res) => {
     try {
         const {productId} = req.body;
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({errorMessage: 'not a valid product id'});
+        }
         const productToDelete = await Product.findById(productId);
 
         if (!productToDelete) {
-            return res.status(400).json({message: "product not found"});
+            return res.status(400).json({errorMessage: "product not found"});
         }
 
-        if (JSON.stringify(productToDelete.userId) !== JSON.stringify(req.user._id)) {
-            return res.status(401).json({message: "unauthorized"});
+        if (JSON.stringify(productToDelete.user) !== JSON.stringify(req.user._id)) {
+            return res.status(400).json({errorMessage: "unauthorized"});
         }
 
         await productToDelete.remove();
 
-        req.user.items = req.user.items.filter(prod => JSON.stringify(prod) !== JSON.stringify(productId));
+        req.user.products = req.user.products.filter(prod => JSON.stringify(prod) !== JSON.stringify(productId));
 
-        await req.user.save();
+        const updatedUser = await req.user.save();
+        await updatedUser.populate([
+            {
+                path: 'products',
+                populate: {
+                    path: 'user',
+                    select: 'username profileId',
+                }
+            },
+        ]).execPopulate();
 
-        res.status(200).json({message: "listing deleted"});
+        res.status(200).json({successMessage: 'Product added', products: updatedUser.products});
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({errorMessage: "Server Error"});
+    }
+};
+
+const editProduct_patch = async (req, res) => {
+    try {
+        const {productName, description, price, category, productId} = req.body;
+        const files = req.files;
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({errorMessage: 'not a valid product id'});
+        }
+        let productPictures = [];
+        if (files.length > 0) {
+            productPictures = files.map(file => {
+                return {img: '/public/' + file.filename}
+            })
+        }
+
+        const productToEdit = await Product.findById(productId);
+
+        if (!productToEdit) {
+            return res.status(400).json({errorMessage: "product not found"});
+        }
+        if (JSON.stringify(productToEdit.user) !== JSON.stringify(req.user._id)) {
+            return res.status(400).json({errorMessage: "unauthorized"});
+        }
+
+        await Product.findOneAndUpdate({_id: productId}, {
+            productName,
+            description,
+            price,
+            category,
+            productPictures
+        }, {new: true})
+
+        const updatedUser = await User.findById(req.user._id);
+        await updatedUser.populate([
+            {
+                path: 'products',
+                populate: {
+                    path: 'user',
+                    select: 'username profileId',
+                }
+            },
+        ]).execPopulate();
+
+        res.status(200).json({successMessage: 'Product added', products: updatedUser.products});
+
+    } catch (err) {
+        res.status(500).json({errorMessage: "Server Error"});
     }
 };
 
@@ -85,5 +152,6 @@ export default {
     add_product_post,
     delete_product_post,
     product_list_post,
-    single_products_get
+    single_products_get,
+    editProduct_patch
 };

@@ -1,50 +1,57 @@
 import React, {useEffect, useState} from 'react';
 import {Main} from "./Main";
 import {connect} from "react-redux";
-import {productApi} from "../../api/api";
+import {requestProductList} from "../../redux/reducers/ProductReducer";
+import {getProductList, getProductsCount} from "../../redux/selectors/productSelectors";
+import {getIsAuthed} from "../../redux/selectors/authSelectors";
+import {getErrorMsg, getIsLoading} from "../../redux/selectors/appSelectors";
+import {addToCart} from "../../redux/reducers/AuthReducer";
 
 const MainContainer = (props) => {
 
     const [Skip, setSkip] = useState(0);
-    const [Limit, setLimit] = useState(5);
-    const [ProductList, setProductList] = useState([]);
-    const [IsLoading, setIsLoading] = useState(true);
-    const [ProductsCount, setProductsCount] = useState(0);
-
-    const getProducts = async (skip, limit, loadMore) => {
-        setIsLoading(true)
-        const res = await productApi.requestProductList(skip, limit);
-        if (res && res.data) {
-            loadMore
-                ? setProductList([...ProductList, ...res.data.products])
-                : setProductList([...res.data.products]);
-            setProductsCount(res.data.productsCount);
-        }
-        setIsLoading(false)
-    }
+    const [IsLoadMore, setIsLoadMore] = useState(false);
+    const [Limit] = useState(5);
 
     useEffect(() => {
-        getProducts(Skip, Limit);
+        props.requestProductList(Skip, Limit);
     }, []);
 
     const loadMore = () => {
         let newSkip = Skip + Limit;
         setSkip(newSkip);
-        getProducts(newSkip, Limit, true);
+        setIsLoadMore(true);
+        props.requestProductList(newSkip, Limit, true);
     };
 
+    const handleAddToCart = (productId) => {
+        props.addToCart(productId);
+    }
     return (
         <div>
-            <Main productList={ProductList}
-                  productsCount={ProductsCount}
+            <Main productList={props.productList}
+                  productsCount={props.productsCount}
+                  isLoadMore={IsLoadMore}
                   loadMore={loadMore}
-                  isLoading={IsLoading}/>
+                  isLoading={props.isLoading}
+                  error={props.errorMsg}
+                  handleAddToCart={handleAddToCart}
+                  isAuthed={props.isAuthed}/>
         </div>
     )
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+    productList: getProductList(state),
+    productsCount: getProductsCount(state),
+    isLoading: getIsLoading(state),
+    errorMsg: getErrorMsg(state),
+    isAuthed: getIsAuthed(state)
+});
 
-const actionCreators = {};
+const actionCreators = {
+    requestProductList,
+    addToCart
+};
 
 export default connect(mapStateToProps, actionCreators)(MainContainer);

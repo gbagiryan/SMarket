@@ -1,12 +1,9 @@
 export const getProduct = (state) => {
-    return state.productReducer.product
+    return state.product.product
 };
 export const getProductList = (state) => {
-    return state.productReducer.productList
+    return state.product.productList
 };
 export const getProductsCount = (state) => {
-    return state.productReducer.productsCount
-};
-export const getProductsIsLoading = (state) => {
-    return state.productReducer.isLoading
+    return state.product.productsCount
 };

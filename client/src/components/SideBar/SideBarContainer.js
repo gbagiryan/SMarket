@@ -7,7 +7,7 @@ import {getAuthedUserData, getIsAuthed} from "../../redux/selectors/authSelector
 const SideBarContainer = (props) => {
     return (
         <div className={styles.sideBar}>
-            <SideBar profile={props.authedUserData} isAuthed={props.isAuthed}/>
+            <SideBar authedUserData={props.authedUserData} isAuthed={props.isAuthed}/>
         </div>
     );
 };

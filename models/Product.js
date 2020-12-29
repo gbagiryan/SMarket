@@ -15,10 +15,14 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    category: {
+    category: [{
         type: String,
+        enum: ['electronics', 'clothes'],
         required: true
-    },
+    }],
+    productPictures: [{
+        img: {type: String}
+    }],
     user: {
         type: mongoose.Schema.Types.ObjectID, ref: 'User',
         required: true,
