@@ -9,49 +9,72 @@ const AUTH_UPDATE_USER_DATA = 'AUTH_UPDATE_USER_DATA';
 const AUTH_ADD_PRODUCT = 'AUTH_ADD_PRODUCT';
 const AUTH_ADD_TO_CART = 'AUTH_ADD_TO_CART';
 
+const AUTH_DELETE_PRODUCT = 'AUTH_DELETE_PRODUCT';
+const AUTH_UPDATE_PRODUCT = 'AUTH_UPDATE_PRODUCT';
+const AUTH_DELETE_FROM_CART = 'AUTH_DELETE_FROM_CART';
+
 const initialState = {
     isAuthed: false,
     authedUserData: null,
-    authedUserProducts: null,
-    authedUserCart: false
+    authedUserProducts: [],
+    authedUserCart: []
 }
 
 export const AuthReducer = (state = initialState, action) => {
     switch (action.type) {
+
         case AUTH_SET_IS_AUTHED:
             return {
                 ...state,
                 isAuthed: action.isAuthed
             }
+
         case AUTH_SET_USER_DATA:
             return {
                 ...state,
                 authedUserData: action.authedUserData
-            }
-        case AUTH_SET_USER_PRODUCTS:
-            return {
-                ...state,
-                authedUserProducts: action.authedUserProducts
-            }
-        case AUTH_SET_USER_CART:
-            return {
-                ...state,
-                authedUserCart: action.authedUserCart
             }
         case AUTH_UPDATE_USER_DATA:
             return {
                 ...state,
                 authedUserData: {...state.authedUserData, ...action.authedUserData}
             }
+
+        case AUTH_SET_USER_PRODUCTS:
+            return {
+                ...state,
+                authedUserProducts: action.authedUserProducts
+            }
         case AUTH_ADD_PRODUCT:
             return {
                 ...state,
                 authedUserProducts: [...state.authedUserProducts, action.addedProduct]
             }
+        case AUTH_UPDATE_PRODUCT:
+            return {
+                ...state,
+                authedUserProducts: [...state.authedUserProducts.filter(p => p._id !== action.updatedProduct._id), action.updatedProduct]
+            }
+        case AUTH_DELETE_PRODUCT:
+            return {
+                ...state,
+                authedUserProducts: state.authedUserProducts.filter(p => p._id !== action.deletedProductId)
+            }
+
+        case AUTH_SET_USER_CART:
+            return {
+                ...state,
+                authedUserCart: action.authedUserCart
+            }
         case AUTH_ADD_TO_CART:
             return {
                 ...state,
                 authedUserCart: [...state.authedUserCart, action.addedProduct]
+            }
+        case AUTH_DELETE_FROM_CART:
+            return {
+                ...state,
+                authedUserCart: state.authedUserCart.filter(p => p._id !== action.deletedProductId)
             }
         default:
             return state;
@@ -59,12 +82,18 @@ export const AuthReducer = (state = initialState, action) => {
 };
 
 const setIsAuthed = (isAuthed) => ({type: AUTH_SET_IS_AUTHED, isAuthed});
+
 const setAuthedUserData = (authedUserData) => ({type: AUTH_SET_USER_DATA, authedUserData});
-const setAuthedUserProducts = (authedUserProducts) => ({type: AUTH_SET_USER_PRODUCTS, authedUserProducts});
-const setAuthedUserCart = (authedUserCart) => ({type: AUTH_SET_USER_CART, authedUserCart});
 const updateAuthedUserData = (authedUserData) => ({type: AUTH_UPDATE_USER_DATA, authedUserData});
+
+const setAuthedUserProducts = (authedUserProducts) => ({type: AUTH_SET_USER_PRODUCTS, authedUserProducts});
 const addToAuthedUserProducts = (addedProduct) => ({type: AUTH_ADD_PRODUCT, addedProduct});
+const updateAuthedUserProduct = (updatedProduct) => ({type: AUTH_UPDATE_PRODUCT, updatedProduct});
+const deleteAuthedUserProduct = (deletedProductId) => ({type: AUTH_DELETE_PRODUCT, deletedProductId});
+
+const setAuthedUserCart = (authedUserCart) => ({type: AUTH_SET_USER_CART, authedUserCart});
 const addToAuthedUserCart = (addedProduct) => ({type: AUTH_ADD_TO_CART, addedProduct});
+const deleteFromAuthedUserCart = (deletedProductId) => ({type: AUTH_DELETE_FROM_CART, deletedProductId});
 
 export const login = (email, password) => async (dispatch) => {
     dispatch(setLoading(true));
@@ -156,7 +185,7 @@ export const deleteProduct = (productId) => async (dispatch) => {
     dispatch(setLoading(true));
     try {
         const res = await authApi.deleteProduct(productId);
-        dispatch(setAuthedUserProducts(res.data.products));
+        dispatch(deleteAuthedUserProduct(res.data.deletedProductId));
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));
     } catch (e) {
@@ -184,7 +213,7 @@ export const deleteFromCart = (productId) => async (dispatch) => {
     dispatch(setLoading(true));
     try {
         const res = await authApi.deleteFromCart(productId);
-        dispatch(setAuthedUserCart(res.data.cart));
+        dispatch(deleteFromAuthedUserCart(res.data.deletedProductId));
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));
     } catch (e) {
@@ -198,7 +227,7 @@ export const editProduct = (formData) => async (dispatch) => {
     dispatch(setLoading(true));
     try {
         const res = await authApi.editProduct(formData);
-        dispatch(setAuthedUserProducts(res.data.products));
+        dispatch(updateAuthedUserProduct(res.data.updatedProduct));
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));
     } catch (e) {

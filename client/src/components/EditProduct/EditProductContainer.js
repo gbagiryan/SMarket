@@ -17,22 +17,22 @@ const EditProductContainer = (props) => {
     }, [props.match.params]);
 
 
-    const [productPictures, setProductPictures] = useState('')
+    const [productPicture, setProductPicture] = useState('')
 
     const handleAddedPhoto = (event) => {
         if (event.target.files.length) {
-            setProductPictures(event.target.files[0])
+            setProductPicture(event.target.files[0])
         }
     }
 
     const handleEdit = (form) => {
         const formData = new FormData();
-        formData.append('productId', form.productId);
+        formData.append('productId', props.product._id);
         formData.append('productName', form.productName);
         formData.append('description', form.description);
         formData.append('price', form.price);
         formData.append('category', form.category);
-        formData.append('productPictures', productPictures);
+        formData.append('productPicture', productPicture);
 
         props.editProduct(formData);
     }

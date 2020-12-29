@@ -1,8 +1,8 @@
 import Product from "../models/Product.js";
 import mongoose from 'mongoose';
-import User from "../models/User.js";
+import fs from 'fs';
 
-const add_product_post = async (req, res) => {
+const product_post = async (req, res) => {
     try {
         const {productName, description, price, category} = req.body;
         const product = new Product({
@@ -25,7 +25,7 @@ const add_product_post = async (req, res) => {
     }
 };
 
-const product_list_post = async (req, res) => {
+const request_product_list_post = async (req, res) => {
     try {
         const skip = req.body.skip;
         const limit = req.body.limit ? req.body.limit : 10;
@@ -42,7 +42,7 @@ const product_list_post = async (req, res) => {
     }
 
 }
-const single_products_get = async (req, res) => {
+const product_get = async (req, res) => {
     try {
         const productId = req.params.productId;
         if (!mongoose.Types.ObjectId.isValid(productId)) {
@@ -62,9 +62,10 @@ const single_products_get = async (req, res) => {
     }
 }
 
-const delete_product_post = async (req, res) => {
+const product_delete = async (req, res) => {
     try {
-        const {productId} = req.body;
+        const productId = req.params.productId;
+        console.log(productId)
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).json({errorMessage: 'not a valid product id'});
         }
@@ -82,35 +83,27 @@ const delete_product_post = async (req, res) => {
 
         req.user.products = req.user.products.filter(prod => JSON.stringify(prod) !== JSON.stringify(productId));
 
-        const updatedUser = await req.user.save();
-        await updatedUser.populate([
-            {
-                path: 'products',
-                populate: {
-                    path: 'user',
-                    select: 'username profileId',
-                }
-            },
-        ]).execPopulate();
+        await req.user.save();
 
-        res.status(200).json({successMessage: 'Product added', products: updatedUser.products});
+        if (productToDelete.productPicture) {
+            fs.unlink(`uploads/${productToDelete.productPicture}`, (err) => {
+                if (err) throw err;
+                console.log(`Image ${productToDelete.productPicture} was deleted`)
+            })
+        }
+
+        res.status(200).json({successMessage: 'Product added', deletedProductId: productToDelete._id});
     } catch (err) {
         res.status(500).json({errorMessage: "Server Error"});
     }
 };
 
-const editProduct_patch = async (req, res) => {
+const product_patch = async (req, res) => {
     try {
         const {productName, description, price, category, productId} = req.body;
-        const files = req.files;
+        const file = req.file;
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).json({errorMessage: 'not a valid product id'});
-        }
-        let productPictures = [];
-        if (files.length > 0) {
-            productPictures = files.map(file => {
-                return {img: '/public/' + file.filename}
-            })
         }
 
         const productToEdit = await Product.findById(productId);
@@ -122,26 +115,15 @@ const editProduct_patch = async (req, res) => {
             return res.status(400).json({errorMessage: "unauthorized"});
         }
 
-        await Product.findOneAndUpdate({_id: productId}, {
+        const updatedProduct = await Product.findOneAndUpdate({_id: productId}, {
             productName,
             description,
             price,
             category,
-            productPictures
+            productPicture: file ? '/public/' + file.filename : null
         }, {new: true})
 
-        const updatedUser = await User.findById(req.user._id);
-        await updatedUser.populate([
-            {
-                path: 'products',
-                populate: {
-                    path: 'user',
-                    select: 'username profileId',
-                }
-            },
-        ]).execPopulate();
-
-        res.status(200).json({successMessage: 'Product added', products: updatedUser.products});
+        res.status(200).json({successMessage: 'Product edited', updatedProduct});
 
     } catch (err) {
         res.status(500).json({errorMessage: "Server Error"});
@@ -149,9 +131,9 @@ const editProduct_patch = async (req, res) => {
 };
 
 export default {
-    add_product_post,
-    delete_product_post,
-    product_list_post,
-    single_products_get,
-    editProduct_patch
+    product_post,
+    product_delete,
+    request_product_list_post,
+    product_get,
+    product_patch
 };

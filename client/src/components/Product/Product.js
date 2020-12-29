@@ -1,11 +1,11 @@
 import React from 'react';
 import Loading from "../Common/Loading/Loading";
 import {NavLink} from "react-router-dom";
-import Errors from "../Common/Errors/Errors";
+import {Error} from "../Common/Messages/Messages";
 
 const Product = (props) => {
-    if (props.errors) {
-        return <Errors error={props.errors}/>
+    if (props.errorMsg) {
+        return <Error errorMsg={props.errorMsg}/>
     }
     if (props.isLoading || !props.product) {
         return <Loading/>

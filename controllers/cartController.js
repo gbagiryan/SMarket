@@ -1,9 +1,9 @@
 import Product from "../models/Product.js";
 import mongoose from "mongoose";
 
-const add_to_cart_post = async (req, res) => {
+const cart_delete = async (req, res) => {
     try {
-        const {productId} = req.body;
+        const productId = req.params.productId;
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).json({errorMessage: 'not a valid product id'});
         }
@@ -24,7 +24,7 @@ const add_to_cart_post = async (req, res) => {
     }
 }
 
-const delete_from_cart_post = async (req, res) => {
+const cart_post = async (req, res) => {
     try {
         const {productId} = req.body;
         if (!mongoose.Types.ObjectId.isValid(productId)) {
@@ -32,14 +32,9 @@ const delete_from_cart_post = async (req, res) => {
         }
         req.user.cart = req.user.cart.filter(prod => JSON.stringify(prod) !== JSON.stringify(productId));
 
-        const updatedUser = await req.user.save();
-        await updatedUser.populate([
-            {
-                path: 'cart'
-            },
-        ]).execPopulate();
+        await req.user.save();
 
-        res.status(200).json({successMessage: 'Product added to cart', cart: updatedUser.cart});
+        res.status(200).json({successMessage: 'Product deleted from cart', deletedProductId: productId});
 
     } catch (err) {
         res.status(500).json({errorMessage: "Server Error"});
@@ -47,6 +42,6 @@ const delete_from_cart_post = async (req, res) => {
 }
 
 export default {
-    add_to_cart_post,
-    delete_from_cart_post
+    cart_post,
+    cart_delete
 };

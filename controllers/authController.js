@@ -76,7 +76,7 @@ const register_post = async (req, res) => {
     }
 };
 
-const editProfile_patch = async (req, res) => {
+const profile_patch = async (req, res) => {
     try {
         const {email, username, firstName, lastName} = req.body;
         const file = req.file;
@@ -121,7 +121,7 @@ const logout_get = (req, res) => {
         res.status(500).json({errorMessage: "Server Error"});
     }
 }
-const isUserAuthed = (req, res) => {
+const verifyAuth = (req, res) => {
     const token = req.cookies.jwt;
     if (!token) {
         return res.status(200).json(false);;
@@ -166,6 +166,6 @@ export default {
     login_post,
     register_post,
     logout_get,
-    isUserAuthed,
-    editProfile_patch
+    verifyAuth,
+    profile_patch
 };

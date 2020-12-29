@@ -5,6 +5,7 @@ export const profileApi = {
         return await Axios.get(`/api/profile/get_profile/${userId}`);
     }
 };
+
 export const productApi = {
     async requestProduct(productId) {
         return await Axios.get(`/api/product/get_product/${productId}`);
@@ -34,10 +35,10 @@ export const authApi = {
         return await Axios.post(`/api/product/add_new_product/`, product);
     },
     async deleteProduct(productId) {
-        return await Axios.post(`/api/product/delete_product/`, {productId});
+        return await Axios.delete(`/api/product/delete_product/${productId}`);
     },
     async deleteFromCart(productId) {
-        return await Axios.post(`/api/cart/delete_from_cart`, {productId});
+        return await Axios.delete(`/api/cart/delete_from_cart/${productId}`);
     },
     async addToCart(productId) {
         return await Axios.post(`/api/cart/add_to_cart`, {productId});

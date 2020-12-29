@@ -3,7 +3,7 @@ import requireAuth from '../middleware/authMiddleware.js';
 import cartController from "../controllers/cartController.js";
 const router = express.Router();
 
-router.post('/add_to_cart', requireAuth, cartController.add_to_cart_post);
-router.post('/delete_from_cart', requireAuth, cartController.delete_from_cart_post);
+router.post('/add_to_cart', requireAuth, cartController.cart_post);
+router.delete('/delete_from_cart/:productId', requireAuth, cartController.cart_delete);
 
 export default router;

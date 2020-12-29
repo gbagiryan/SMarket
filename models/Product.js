@@ -20,9 +20,9 @@ const productSchema = new mongoose.Schema({
         enum: ['electronics', 'clothes'],
         required: true
     }],
-    productPictures: [{
-        img: {type: String}
-    }],
+    productPicture: {
+        type: String
+    },
     user: {
         type: mongoose.Schema.Types.ObjectID, ref: 'User',
         required: true,

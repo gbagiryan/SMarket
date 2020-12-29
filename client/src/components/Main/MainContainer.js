@@ -34,7 +34,7 @@ const MainContainer = (props) => {
                   isLoadMore={IsLoadMore}
                   loadMore={loadMore}
                   isLoading={props.isLoading}
-                  error={props.errorMsg}
+                  errorMsg={props.errorMsg}
                   handleAddToCart={handleAddToCart}
                   isAuthed={props.isAuthed}/>
         </div>

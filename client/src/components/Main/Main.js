@@ -1,7 +1,7 @@
 import React from 'react';
 import Loading from "../Common/Loading/Loading";
 import ProductPreview from "../ProductPreview/ProductPreview";
-import Errors from "../Common/Errors/Errors";
+import {Error} from "../Common/Messages/Messages";
 
 export const Main = (props) => {
     if (props.isLoading && !props.isLoadMore) {
@@ -24,8 +24,8 @@ export const Main = (props) => {
             <div>
                 {props.isLoading && props.isLoadMore
                     ? <Loading/>
-                    : props.error
-                        ? <Errors error={props.error}/>
+                    : props.errorMsg
+                        ? <Error errorMsg={props.errorMsg}/>
                         : (props.productsCount - props.productList.length > 0)
                             ? <button onClick={props.loadMore}>Load More</button>
                             : <h2>no more products to show</h2>}

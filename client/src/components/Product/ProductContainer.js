@@ -22,7 +22,7 @@ const ProductContainer = React.memo((props) => {
 
     return (
         <div>
-            <Product product={props.product} errors={props.errorMsg} isLoading={props.isLoading}
+            <Product product={props.product} errorMsg={props.errorMsg} isLoading={props.isLoading}
                      handleAddToCart={handleAddToCart} isAuthed={props.isAuthed}/>
         </div>
     );
