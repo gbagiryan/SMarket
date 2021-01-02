@@ -18,6 +18,8 @@ import EditProductContainer from "./components/EditProduct/EditProductContainer"
 import {NotFound} from "./components/NotFound/NotFound";
 import {getInitialized} from "./redux/selectors/appSelectors";
 import {getIsAuthed} from "./redux/selectors/authSelectors";
+import Grid from "@material-ui/core/Grid";
+import LoginContainer from "./components/Login/LoginContainer";
 
 const App = (props) => {
 
@@ -30,15 +32,21 @@ const App = (props) => {
     }
     return (
         <BrowserRouter>
-            <div className='app-wrapper'>
-                <HeaderContainer/>
-                <div className='main-area'>
-                    <SideBarContainer/>
-                    <div className='content-area'>
+            <Grid container direction={'column'} spacing={1}>
+                <Grid item>
+                    <HeaderContainer/>
+                </Grid>
+                <Grid item container spacing={3}>
+                    <Grid item xs={1}/>
+                    <Grid item xs={2}>
+                        <SideBarContainer/>
+                    </Grid>
+                    <Grid item xs={8}>
                         <Switch>
                             <Route exact path='/' component={MainContainer}/>
                             <Route exact path='/add_new_listing' component={AddListingContainer}/>
                             <Route path='/register' component={RegisterContainer}/>
+                            <Route path='/login' component={LoginContainer}/>
                             <Route path='/user/:userId' component={ProfileContainer}/>
                             <Route exact path='/product' redirect to={'/'}>
                                 <Redirect to="/"/>
@@ -52,10 +60,40 @@ const App = (props) => {
                             <Route path='/edit_product/:productId' component={EditProductContainer}/>
                             <Route component={NotFound}/>
                         </Switch>
-                    </div>
-                </div>
-                <Footer/>
-            </div>
+                    </Grid>
+
+                    <Grid item xs={1}/>
+                </Grid>
+                <Grid item>
+                    <Footer/>
+                </Grid>
+            </Grid>
+            {/*<div className='app-wrapper'>*/}
+            {/*    <HeaderContainer/>*/}
+            {/*    <div className='main-area'>*/}
+            {/*        <SideBarContainer/>*/}
+            {/*        <div className='content-area'>*/}
+            {/*            <Switch>*/}
+            {/*                <Route exact path='/' component={MainContainer}/>*/}
+            {/*                <Route exact path='/add_new_listing' component={AddListingContainer}/>*/}
+            {/*                <Route path='/register' component={RegisterContainer}/>*/}
+            {/*                <Route path='/user/:userId' component={ProfileContainer}/>*/}
+            {/*                <Route exact path='/product' redirect to={'/'}>*/}
+            {/*                    <Redirect to="/"/>*/}
+            {/*                </Route>*/}
+            {/*                <Route path='/product/:productId' component={ProductContainer}/>*/}
+            {/*                <Route exact path='/profile' component={AuthedUserProfileContainer}/>*/}
+            {/*                <Route path='/edit_profile' component={EditProfileContainer}/>*/}
+            {/*                <Route exact path='/edit_product' redirect to={'/'}>*/}
+            {/*                    <Redirect to="/"/>*/}
+            {/*                </Route>*/}
+            {/*                <Route path='/edit_product/:productId' component={EditProductContainer}/>*/}
+            {/*                <Route component={NotFound}/>*/}
+            {/*            </Switch>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*    <Footer/>*/}
+            {/*</div>*/}
         </BrowserRouter>
     );
 }

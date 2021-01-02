@@ -117,10 +117,10 @@ export const logout = () => async (dispatch) => {
     dispatch(setLoading(true));
     try {
         await authApi.logout();
+        dispatch(setIsAuthed(false));
         dispatch(setAuthedUserData(null));
         dispatch(setAuthedUserProducts(null));
         dispatch(setAuthedUserCart(null));
-        dispatch(setIsAuthed(false));
         dispatch(setLoading(false));
     } catch (e) {
         console.log(e.errorMessage);

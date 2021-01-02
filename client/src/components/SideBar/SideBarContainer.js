@@ -1,12 +1,11 @@
 import React from 'react';
-import styles from './SideBarContainer.module.css';
 import {connect} from "react-redux";
 import {SideBar} from "./SideBar";
 import {getAuthedUserData, getIsAuthed} from "../../redux/selectors/authSelectors";
 
 const SideBarContainer = (props) => {
     return (
-        <div className={styles.sideBar}>
+        <div>
             <SideBar authedUserData={props.authedUserData} isAuthed={props.isAuthed}/>
         </div>
     );

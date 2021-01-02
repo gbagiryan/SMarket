@@ -116,7 +116,7 @@ const profile_patch = async (req, res) => {
 const logout_get = (req, res) => {
     try {
         res.clearCookie('jwt');
-        res.status(200);
+        res.status(200).json();
     } catch (err) {
         res.status(500).json({errorMessage: "Server Error"});
     }

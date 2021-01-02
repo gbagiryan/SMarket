@@ -65,7 +65,6 @@ const product_get = async (req, res) => {
 const product_delete = async (req, res) => {
     try {
         const productId = req.params.productId;
-        console.log(productId)
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).json({errorMessage: 'not a valid product id'});
         }
