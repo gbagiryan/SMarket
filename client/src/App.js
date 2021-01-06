@@ -32,11 +32,11 @@ const App = (props) => {
     }
     return (
         <BrowserRouter>
-            <Grid container direction={'column'} spacing={1}>
+            <Grid container direction={'column'} spacing={1} xs={12}>
                 <Grid item>
                     <HeaderContainer/>
                 </Grid>
-                <Grid item container spacing={3}>
+                <Grid item container spacing={3} xs={12}>
                     <Grid item xs={1}/>
                     <Grid item xs={2}>
                         <SideBarContainer/>

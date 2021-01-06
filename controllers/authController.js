@@ -35,7 +35,7 @@ const login_post = async (req, res) => {
         });
         res.status(200).json({
             user:{
-                id: user.profileId,
+                id: user._id,
                 username: user.username,
                 email: user.email,
                 firstName: user.firstName,
@@ -63,7 +63,6 @@ const register_post = async (req, res) => {
             email,
             password: hashedPassword,
             username,
-            profileId: username,
             firstName,
             lastName
         });
@@ -144,7 +143,7 @@ const verifyAuth = (req, res) => {
                     .populate('cart');
                 res.status(200).json({
                     user:{
-                        id: user.profileId,
+                        id: user._id,
                         username: user.username,
                         email: user.email,
                         firstName: user.firstName,

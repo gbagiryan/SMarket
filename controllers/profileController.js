@@ -3,7 +3,7 @@ import User from '../models/User.js';
 const profile_get = async (req, res) => {
     try {
         const paramsId = req.params.userId;
-        const user = await User.findOne({profileId: paramsId})
+        const user = await User.findById(paramsId)
             .select('-password')
             .populate('products');
         if (!user) {

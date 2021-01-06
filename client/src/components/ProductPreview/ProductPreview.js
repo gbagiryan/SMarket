@@ -26,7 +26,7 @@ const ProductPreview = (props) => {
                 />
             </CardActionArea>
             <CardContent>
-                <Typography variant="body2" color="textSecondary" component={Link} to={`/user/${props.product.user.profileId}`}>
+                <Typography variant="body2" color="textSecondary" component={Link} to={`/user/${props.product.user._id}`}>
                     {`Posted by ${props.product.user.username}`}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">

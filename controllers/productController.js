@@ -34,7 +34,7 @@ const request_product_list_post = async (req, res) => {
         const products = await Product.find()
             .skip(skip)
             .limit(limit)
-            .populate('user', 'username profileId');
+            .populate('user', 'username');
 
         res.status(200).json({products, productsCount});
     } catch (err) {
@@ -49,7 +49,7 @@ const product_get = async (req, res) => {
             return res.status(400).json({errorMessage: 'not a valid product id'});
         }
         const product = await Product.findById(productId)
-            .populate('user', 'username profileId');
+            .populate('user', 'username');
 
         if (!product) {
             return res.status(400).json({errorMessage: "product not found"});

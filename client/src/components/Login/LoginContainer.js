@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {login} from "../../redux/reducers/AuthReducer";
 import {Redirect} from "react-router-dom";
 import {getIsAuthed} from "../../redux/selectors/authSelectors";
+import {getIsLoading} from "../../redux/selectors/appSelectors";
 
 const LoginContainer = (props) => {
 
@@ -16,16 +17,13 @@ const LoginContainer = (props) => {
     }
 
     return (
-        <div>
-            <div>
-                <LoginReduxForm onSubmit={onLoginSubmit}/>
-            </div>
-        </div>
+        <LoginReduxForm onSubmit={onLoginSubmit} isLoading={props.isLoading}/>
     )
 };
 
 const mapStateToProps = (state) => ({
-    isAuthed: getIsAuthed(state)
+    isAuthed: getIsAuthed(state),
+    isLoading: getIsLoading(state)
 });
 
 const actionCreators = {

@@ -6,11 +6,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
 import LoginContainer from "../Login/LoginContainer";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import RegisterContainer from "../Register/RegisterContainer";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,6 +22,12 @@ const useStyles = makeStyles((theme) => ({
     title: {
         flexGrow: 1,
     },
+    paperStyle: {
+        padding: 20,
+        margin: 'auto',
+        height: 450,
+        width: 350,
+    }
 }));
 
 export const Header = (props) => {
@@ -45,42 +51,23 @@ export const Header = (props) => {
                         <Button variant="outlined" color="inherit" onClick={props.handleToggleModal}>
                             Register
                         </Button>
-                        <Dialog open={props.modalOpen} onClose={props.handleToggleModal}>
-                            <AppBar position="static">
-                                <Tabs value={props.selectedTab} onChange={props.handleChangeTab}>
+                        <Dialog classes={classes.paper} open={props.modalOpen}
+                                onClose={props.handleToggleModal}>
+                            <AppBar position="static" fullWidth>
+                                <Tabs centered variant="fullWidth" value={props.selectedTab}
+                                      onChange={props.handleChangeTab}>
                                     <Tab label="Log in"/>
                                     <Tab label="Register"/>
                                 </Tabs>
                             </AppBar>
-                            <DialogContent>
+                            <Paper className={classes.paperStyle}>
                                 {props.selectedTab === 0 && <LoginContainer/>}
                                 {props.selectedTab === 1 && <RegisterContainer/>}
-                            </DialogContent>
+                            </Paper>
                         </Dialog>
                     </div>
                 }
             </Toolbar>
         </AppBar>
-
-
-        // <div className={styles.header}>
-        //     <Link exact to={'/'} className={styles.logo}>
-        //         SMarket
-        //     </Link>
-        //     <div className={styles.loginBlock}>
-        //         {props.isAuthed
-        //             ? <div>
-        //                 <NavLink to={'/profile'} activeClassName={styles.active} className={styles.item}>
-        //                     Profile
-        //                 </NavLink>
-        //                 <button onClick={props.logout}>Logout</button>
-        //             </div>
-        //
-        //             : <NavLink to={'/register'} activeClassName={styles.active} className={styles.item}>
-        //                 Register
-        //             </NavLink>
-        //         }
-        //     </div>
-        // </div>
     )
 };
