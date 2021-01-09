@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {login} from "../../redux/reducers/AuthReducer";
 import {Redirect} from "react-router-dom";
 import {getIsAuthed} from "../../redux/selectors/authSelectors";
-import {getIsLoading} from "../../redux/selectors/appSelectors";
+import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/appSelectors";
 
 const LoginContainer = (props) => {
 
@@ -17,13 +17,15 @@ const LoginContainer = (props) => {
     }
 
     return (
-        <LoginReduxForm onSubmit={onLoginSubmit} isLoading={props.isLoading}/>
+        <LoginReduxForm onSubmit={onLoginSubmit} isLoading={props.isLoading} errorMsg={props.errorMsg} successMsg={props.successMsg}/>
     )
 };
 
 const mapStateToProps = (state) => ({
     isAuthed: getIsAuthed(state),
-    isLoading: getIsLoading(state)
+    isLoading: getIsLoading(state),
+    errorMsg: getErrorMsg(state),
+    successMsg: getSuccessMsg(state)
 });
 
 const actionCreators = {

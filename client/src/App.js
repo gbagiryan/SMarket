@@ -45,8 +45,8 @@ const App = (props) => {
                         <Switch>
                             <Route exact path='/' component={MainContainer}/>
                             <Route exact path='/add_new_listing' component={AddListingContainer}/>
-                            <Route path='/register' component={RegisterContainer}/>
-                            <Route path='/login' component={LoginContainer}/>
+                            {/*<Route path='/register' component={RegisterContainer}/>*/}
+                            {/*<Route path='/login' component={LoginContainer}/>*/}
                             <Route path='/user/:userId' component={ProfileContainer}/>
                             <Route exact path='/product' redirect to={'/'}>
                                 <Redirect to="/"/>

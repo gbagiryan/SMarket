@@ -67,9 +67,9 @@ export const requestProductList = (skip, limit, loadMore) => async (dispatch) =>
         }
         dispatch(setLoading(false));
     } catch (e) {
-        console.log(e.errorMessage);
+        console.log(e.response.data.errorMessage);
         dispatch(setLoading(false));
-        dispatch(setErrorMsg(e.errorMessage));
+        dispatch(setErrorMsg(e.response.data.errorMessage));
     }
 };
 

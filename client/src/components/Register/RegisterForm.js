@@ -6,6 +6,7 @@ import {minLength, passwordsMatch, required, validEmail} from "../Common/Validat
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Loading from "../Common/Loading/Loading";
+import {Error, Success} from "../Common/Messages/Messages";
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     },
     paperStyle: {
         padding: 20,
-        margin: '20px auto',
+        margin: 'auto',
         height: 450,
         width: 350,
     }
@@ -29,10 +30,19 @@ const RegisterForm = (props) => {
     const classes = useStyles();
 
     return (
-        props.isLoading
-            ? <Loading/>
-            : <form className={classes.form} onSubmit={props.handleSubmit}>
+        <Paper className={classes.paperStyle}>
+            <form className={classes.form} onSubmit={props.handleSubmit}>
                 <Grid container spacing={2}>
+                    {props.errorMsg &&
+                    <Grid item xs={12}>
+                        <Error errorMsg={props.errorMsg}/>
+                    </Grid>
+                    }
+                    {props.successMsg &&
+                    <Grid item xs={12}>
+                        <Success successMsg={props.successMsg}/>
+                    </Grid>
+                    }
                     <Grid item xs={6}>
                         <Field fullWidth placeholder={'Name'} name={'firstName'} component={renderTextField}
                                label={'Name'}
@@ -67,7 +77,11 @@ const RegisterForm = (props) => {
 
                 <Button fullWidth type={"submit"} variant="contained" color="primary"
                         className={classes.button}>Register</Button>
+                {props.isLoading &&
+                <Loading/>
+                }
             </form>
+        </Paper>
     )
 };
 

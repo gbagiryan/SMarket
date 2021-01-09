@@ -4,6 +4,8 @@ import {compose} from "redux";
 import {withAuthRedirect} from "../../HOCs/withAuthRedirect";
 import {PostProductReduxForm} from "./PostProductForm";
 import {postProduct} from "../../redux/reducers/AuthReducer";
+import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/appSelectors";
+import {EditProductReduxForm} from "../EditProduct/EditProductForm";
 
 const PostProductContainer = (props) => {
 
@@ -15,13 +17,19 @@ const PostProductContainer = (props) => {
         <div>
             <h1>Add new listing</h1>
             <div>
-                <PostProductReduxForm onSubmit={onAddListingSubmit}/>
+                <PostProductReduxForm onSubmit={onAddListingSubmit}
+                                      isLoading={props.isLoading} errorMsg={props.errorMsg}
+                                      successMsg={props.successMsg}/>
             </div>
         </div>
     )
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+    isLoading: getIsLoading(state),
+    errorMsg: getErrorMsg(state),
+    successMsg: getSuccessMsg(state)
+});
 
 const actionCreators = {
     postProduct

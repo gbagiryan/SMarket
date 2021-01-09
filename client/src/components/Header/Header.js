@@ -21,12 +21,6 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
-    },
-    paperStyle: {
-        padding: 20,
-        margin: 'auto',
-        height: 450,
-        width: 350,
     }
 }));
 
@@ -60,10 +54,8 @@ export const Header = (props) => {
                                     <Tab label="Register"/>
                                 </Tabs>
                             </AppBar>
-                            <Paper className={classes.paperStyle}>
-                                {props.selectedTab === 0 && <LoginContainer/>}
-                                {props.selectedTab === 1 && <RegisterContainer/>}
-                            </Paper>
+                            {props.selectedTab === 0 && <LoginContainer/>}
+                            {props.selectedTab === 1 && <RegisterContainer/>}
                         </Dialog>
                     </div>
                 }

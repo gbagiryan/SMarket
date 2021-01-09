@@ -4,7 +4,8 @@ import {register} from "../../redux/reducers/AuthReducer";
 import {RegisterReduxForm} from "./RegisterForm";
 import {getIsAuthed} from "../../redux/selectors/authSelectors";
 import {Redirect} from "react-router-dom";
-import {getIsLoading} from "../../redux/selectors/appSelectors";
+import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/appSelectors";
+import {PostProductReduxForm} from "../PostProduct/PostProductForm";
 
 const RegisterContainer = (props) => {
 
@@ -17,13 +18,16 @@ const RegisterContainer = (props) => {
     }
 
     return (
-        <RegisterReduxForm onSubmit={onRegisterSubmit} isLoading={props.isLoading}/>
+        <RegisterReduxForm onSubmit={onRegisterSubmit} isLoading={props.isLoading}
+                           errorMsg={props.errorMsg} successMsg={props.successMsg}/>
     )
 };
 
 const mapStateToProps = (state) => ({
     isAuthed: getIsAuthed(state),
-    isLoading: getIsLoading(state)
+    isLoading: getIsLoading(state),
+    errorMsg: getErrorMsg(state),
+    successMsg: getSuccessMsg(state)
 });
 
 const actionCreators = {

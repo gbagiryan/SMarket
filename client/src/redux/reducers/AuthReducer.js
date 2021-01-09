@@ -107,9 +107,9 @@ export const login = (email, password) => async (dispatch) => {
     } catch (e) {
         dispatch(setAuthedUserData(null));
         dispatch(setIsAuthed(false));
-        console.log(e.errorMessage);
+        console.log(e.response.data.errorMessage);
         dispatch(setLoading(false));
-        dispatch(setErrorMsg(e.errorMessage));
+        dispatch(setErrorMsg(e.response.data.errorMessage));
     }
 };
 
@@ -123,9 +123,9 @@ export const logout = () => async (dispatch) => {
         dispatch(setAuthedUserCart(null));
         dispatch(setLoading(false));
     } catch (e) {
-        console.log(e.errorMessage);
+        console.log(e.response.data.errorMessage);
         dispatch(setLoading(false));
-        dispatch(setErrorMsg(e.errorMessage));
+        dispatch(setErrorMsg(e.response.data.errorMessage));
     }
 };
 
@@ -136,9 +136,9 @@ export const register = (email, username, password, firstName, lastName) => asyn
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));
     } catch (e) {
-        console.log(e.errorMessage);
+        console.log(e.response.data.errorMessage);
         dispatch(setLoading(false));
-        dispatch(setErrorMsg(e.errorMessage));
+        dispatch(setErrorMsg(e.response.data.errorMessage));
     }
 };
 
@@ -159,9 +159,9 @@ export const verifyAuth = () => async (dispatch) => {
     } catch (e) {
         dispatch(setAuthedUserData(null));
         dispatch(setIsAuthed(false));
-        console.log(e.errorMessage);
+        console.log(e.response.data.errorMessage);
         dispatch(setLoading(false));
-        dispatch(setErrorMsg(e.errorMessage));
+        dispatch(setErrorMsg(e.response.data.errorMessage));
     }
 };
 
@@ -175,9 +175,9 @@ export const editProfile = (formData) => async (dispatch) => {
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));
     } catch (e) {
-        console.log(e.errorMessage);
+        console.log(e.response.data.errorMessage);
         dispatch(setLoading(false));
-        dispatch(setErrorMsg(e.errorMessage));
+        dispatch(setErrorMsg(e.response.data.errorMessage));
     }
 };
 
@@ -189,9 +189,9 @@ export const deleteProduct = (productId) => async (dispatch) => {
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));
     } catch (e) {
-        console.log(e.errorMessage);
+        console.log(e.response.data.errorMessage);
         dispatch(setLoading(false));
-        dispatch(setErrorMsg(e.errorMessage));
+        dispatch(setErrorMsg(e.response.data.errorMessage));
     }
 };
 
@@ -203,9 +203,9 @@ export const addToCart = (productId) => async (dispatch) => {
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));
     } catch (e) {
-        console.log(e.errorMessage);
+        console.log(e.response.data.errorMessage);
         dispatch(setLoading(false));
-        dispatch(setErrorMsg(e.errorMessage));
+        dispatch(setErrorMsg(e.response.data.errorMessage));
     }
 };
 
@@ -217,9 +217,9 @@ export const deleteFromCart = (productId) => async (dispatch) => {
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));
     } catch (e) {
-        console.log(e.errorMessage);
+        console.log(e.response.data.errorMessage);
         dispatch(setLoading(false));
-        dispatch(setErrorMsg(e.errorMessage));
+        dispatch(setErrorMsg(e.response.data.errorMessage));
     }
 };
 
@@ -231,9 +231,9 @@ export const editProduct = (formData) => async (dispatch) => {
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));
     } catch (e) {
-        console.log(e.errorMessage);
+        console.log(e.response.data.errorMessage);
         dispatch(setLoading(false));
-        dispatch(setErrorMsg(e.errorMessage));
+        dispatch(setErrorMsg(e.response.data.errorMessage));
     }
 };
 
@@ -245,8 +245,8 @@ export const postProduct = (product) => async (dispatch) => {
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));
     } catch (e) {
-        console.log(e.errorMessage);
+        console.log(e.response.data.errorMessage);
         dispatch(setLoading(false));
-        dispatch(setErrorMsg(e.errorMessage));
+        dispatch(setErrorMsg(e.response.data.errorMessage));
     }
 };

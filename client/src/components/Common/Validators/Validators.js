@@ -9,8 +9,8 @@ export const validEmail = (value) => {
         : 'Invalid email'
 };
 export const minLength = (minLength) => (value) => {
-    return value.length >= minLength ? undefined : 'Password must be at least 6 characters long'
+    return value.length >= minLength ? undefined : `Minimal length is ${minLength}`
 };
 export const maxLength = (maxLength) => (value) => {
-    return value.length <= maxLength ? undefined : 'Password must be at least 6 characters long'
+    return value.length <= maxLength ? undefined : `Maximal length is ${maxLength}`
 };

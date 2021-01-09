@@ -34,7 +34,7 @@ const login_post = async (req, res) => {
             httpOnly: true, sameSite: true, maxAge: 60 * 60 * 1000
         });
         res.status(200).json({
-            user:{
+            user: {
                 id: user._id,
                 username: user.username,
                 email: user.email,
@@ -98,7 +98,7 @@ const profile_patch = async (req, res) => {
         }, {new: true})
 
         res.status(200).json({
-            successMessage: "registration successful",
+            successMessage: "Profile edited",
             user: {
                 username: editedUser.username,
                 email: editedUser.email,
@@ -123,7 +123,7 @@ const logout_get = (req, res) => {
 const verifyAuth = (req, res) => {
     const token = req.cookies.jwt;
     if (!token) {
-        return res.status(200).json(false);;
+        return res.status(200).json(false);
     }
     try {
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
@@ -142,7 +142,7 @@ const verifyAuth = (req, res) => {
                     ])
                     .populate('cart');
                 res.status(200).json({
-                    user:{
+                    user: {
                         id: user._id,
                         username: user.username,
                         email: user.email,
