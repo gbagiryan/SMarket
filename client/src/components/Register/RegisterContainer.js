@@ -1,25 +1,49 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {connect} from "react-redux";
 import {register} from "../../redux/reducers/AuthReducer";
 import {RegisterReduxForm} from "./RegisterForm";
 import {getIsAuthed} from "../../redux/selectors/authSelectors";
 import {Redirect} from "react-router-dom";
 import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/appSelectors";
-import {PostProductReduxForm} from "../PostProduct/PostProductForm";
 
 const RegisterContainer = (props) => {
+
+    const imageMaxSize = 1024 * 1024 * 10;
+    const validFormats = ['image/png', 'image/x-png', 'image/jpg', 'image/jpeg'];
+    const multipleUpload = false;
+
+    const [profilePicture, setProfilePicture] = useState('')
 
     if (props.isAuthed) {
         return <Redirect to={'/profile'}/>
     }
 
-    const onRegisterSubmit = (formData) => {
-        props.register(formData.email, formData.username, formData.password, formData.firstName, formData.lastName)
+    const handleDrop = (files, rejectedFiles) => {
+        if (rejectedFiles && rejectedFiles.length > 0) {
+            alert(rejectedFiles[0].errors[0].message)
+        }
+        if (files && files.length > 0) {
+            setProfilePicture(files[0])
+        }
+    }
+
+    const handleRegisterSubmit = (form) => {
+        const formData = new FormData();
+        formData.append('firstName', form.firstName);
+        formData.append('lastName', form.lastName);
+        formData.append('username', form.username);
+        formData.append('email', form.email);
+        formData.append('password', form.password);
+        formData.append('profilePicture', profilePicture);
+
+        props.register(formData)
     }
 
     return (
-        <RegisterReduxForm onSubmit={onRegisterSubmit} isLoading={props.isLoading}
-                           errorMsg={props.errorMsg} successMsg={props.successMsg}/>
+        <RegisterReduxForm onSubmit={handleRegisterSubmit} isLoading={props.isLoading}
+                           errorMsg={props.errorMsg} successMsg={props.successMsg} handleDrop={handleDrop}
+                           imageMaxSize={imageMaxSize} validFormats={validFormats}
+                           multipleUpload={multipleUpload}/>
     )
 };
 

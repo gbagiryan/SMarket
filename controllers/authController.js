@@ -53,7 +53,9 @@ const login_post = async (req, res) => {
 
 const register_post = async (req, res) => {
     try {
-        const {email, username, password, firstName, lastName} = req.body;
+        const {firstName, lastName, username, email, password} = req.body;
+        const file = req.file;
+
         const candidate = await User.findOne({email});
         if (candidate) {
             return res.status(400).json({errorMessage: 'email exists'});
@@ -64,13 +66,15 @@ const register_post = async (req, res) => {
             password: hashedPassword,
             username,
             firstName,
-            lastName
+            lastName,
+            profilePicture: file ? '/public/' + file.filename : null
         });
         await user.save();
 
         res.status(200).json({successMessage: "registration successful"});
 
     } catch (err) {
+        console.log(err)
         res.status(500).json({errorMessage: "Server Error"});
     }
 };

@@ -7,6 +7,7 @@ import Loading from "../Common/Loading/Loading";
 import Grid from "@material-ui/core/Grid";
 import {Error, Success} from "../Common/Messages/Messages";
 import Paper from "@material-ui/core/Paper";
+import {DropZone} from "../Common/DropZone/DropZone";
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     paperStyle: {
         padding: 20,
         margin: 'auto',
-        height: 450,
+        minHeight: 450,
         width: 350,
     },
 }));
@@ -57,7 +58,10 @@ const EditProfile = (props) => {
                         <Field fullWidth placeholder={'Last Name'} name={'lastName'} component={renderTextField}
                                validate={[required]}/>
                     </Grid>
-                    <input onChange={props.handleAddedPhoto} type={'file'}/>
+                    <Grid item xs={12}>
+                        <DropZone handleDrop={props.handleDrop} imageMaxSize={props.imageMaxSize}
+                                  validFormats={props.validFormats} multipleUpload={props.multipleUpload}/>
+                    </Grid>
                     <Button fullWidth type={"submit"} variant="contained" color="primary"
                             className={classes.button}>Edit</Button>
                     {props.isLoading &&

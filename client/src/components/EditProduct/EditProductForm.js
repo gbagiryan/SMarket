@@ -6,8 +6,8 @@ import {renderTextField} from "../Common/MaterialUiForm/FormFields";
 import Grid from "@material-ui/core/Grid";
 import {Error, Success} from "../Common/Messages/Messages";
 import Loading from "../Common/Loading/Loading";
-import Dropzone from "react-dropzone";
 import Paper from "@material-ui/core/Paper";
+import {DropZone} from "../Common/DropZone/DropZone";
 
 
 const maxLength100 = maxLength(100);
@@ -23,10 +23,9 @@ const useStyles = makeStyles(theme => ({
     paperStyle: {
         padding: 20,
         margin: 'auto',
-        height: 450,
+        minHeight: 450,
         width: 350,
-    },
-    dropzone: {}
+    }
 }));
 
 const EditProduct = (props) => {
@@ -63,16 +62,8 @@ const EditProduct = (props) => {
                                validate={[required]}/>
                     </Grid>
                     <Grid item xs={12}>
-                        <Dropzone onDrop={props.handleDrop} multiple accept={''} maxSize={props.imageMaxSize}>
-                            {
-                                ({getRootProps, getInputProps}) => (
-                                    <Paper className={classes.dropzone} variant={'outlined'} {...getRootProps()}>
-                                        <input {...getInputProps()} />
-                                        <p>Drag 'n' drop here</p>
-                                    </Paper>
-                                )
-                            }
-                        </Dropzone>
+                        <DropZone handleDrop={props.handleDrop} imageMaxSize={props.imageMaxSize}
+                                  validFormats={props.validFormats} multipleUpload={props.multipleUpload}/>
                     </Grid>
                     <Button fullWidth type={"submit"} variant="contained" color="primary"
                             className={classes.button}>Save</Button>

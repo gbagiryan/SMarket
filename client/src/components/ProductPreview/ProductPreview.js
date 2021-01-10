@@ -21,7 +21,7 @@ const ProductPreview = (props) => {
                 />
                 <CardMedia
                     className={classes.media}
-                    image={props.product.productPicture}
+                    image={props.product.productMainPicture}
                     title={props.product.productName}
                 />
             </CardActionArea>

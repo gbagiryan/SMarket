@@ -12,6 +12,7 @@ const EditProductContainer = (props) => {
 
     const imageMaxSize = 1024 * 1024 * 10;
     const validFormats = ['image/png', 'image/x-png', 'image/jpg', 'image/jpeg'];
+    const multipleUpload = true;
 
     useEffect(() => {
         let productId = props.match.params.productId;
@@ -22,30 +23,12 @@ const EditProductContainer = (props) => {
 
     const [productPicture, setProductPicture] = useState('')
 
-    const validateImg = (files) => {
-        if (files && files.length > 0) {
-            const currentFile = files[0];
-            if (currentFile.size > imageMaxSize) {
-                alert(`Image max size is ${imageMaxSize}`);
-                return false
-            }
-            if (!validFormats.includes(currentFile.type)) {
-                alert(`${currentFile.name} is not an image`);
-                return false
-            }
-            return true;
-        }
-    }
-
     const handleDrop = (files, rejectedFiles) => {
         if (rejectedFiles && rejectedFiles.length > 0) {
-            validateImg(rejectedFiles);
+            alert(rejectedFiles[0].errors[0].message)
         }
         if (files && files.length > 0) {
-            const isValid = validateImg(files);
-            if (isValid) {
-                setProductPicture(files[0])
-            }
+            setProductPicture(files[0])
         }
     }
 
@@ -56,7 +39,7 @@ const EditProductContainer = (props) => {
         formData.append('description', form.description);
         formData.append('price', form.price);
         formData.append('category', form.category);
-        formData.append('productPicture', productPicture);
+        formData.append('productPictures', productPicture);
 
         props.editProduct(formData);
     }
@@ -64,7 +47,8 @@ const EditProductContainer = (props) => {
         <div>
             <EditProductReduxForm product={props.product} onSubmit={handleEdit} isLoading={props.isLoading}
                                   errorMsg={props.errorMsg} successMsg={props.successMsg}
-                                  handleDrop={handleDrop} imageMaxSize={imageMaxSize}/>
+                                  handleDrop={handleDrop} imageMaxSize={imageMaxSize} validFormats={validFormats}
+                                  multipleUpload={multipleUpload}/>
         </div>
     )
 };

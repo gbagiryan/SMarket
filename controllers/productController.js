@@ -5,12 +5,23 @@ import fs from 'fs';
 const product_post = async (req, res) => {
     try {
         const {productName, description, price, category} = req.body;
+        const files = req.files;
+
+        let uploadedFilesArr = [];
+        if (files && files.length > 0 && files.length <= 5) {
+            uploadedFilesArr=files.map(file => `/public/${file.filename}`);
+        } else {
+            return res.status(400).json({errorMessage: 'Please upload from 1 to 5 images'});
+        }
+
         const product = new Product({
             productName,
             description,
             price,
             category,
             user: req.user._id,
+            productPictures: uploadedFilesArr.length > 0 ? uploadedFilesArr : null,
+            productMainPicture: uploadedFilesArr.length > 0 ? uploadedFilesArr[0] : null
         });
 
         await product.save();
@@ -21,6 +32,7 @@ const product_post = async (req, res) => {
 
         res.status(200).json({successMessage: 'Product added', addedProduct: product});
     } catch (err) {
+        console.log(err)
         res.status(500).json({errorMessage: "Server Error"});
     }
 };

@@ -20,9 +20,14 @@ const productSchema = new mongoose.Schema({
         enum: ['electronics', 'clothes'],
         required: true
     }],
-    productPicture: {
-        type: String
+    productMainPicture: {
+        type: String,
+        required: true
     },
+    productPictures: [{
+        type: String,
+        required: true
+    }],
     user: {
         type: mongoose.Schema.Types.ObjectID, ref: 'User',
         required: true,

@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Loading from "../Common/Loading/Loading";
 import {Error, Success} from "../Common/Messages/Messages";
+import {DropZone} from "../Common/DropZone/DropZone";
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     paperStyle: {
         padding: 20,
         margin: 'auto',
-        height: 450,
+        minHeight: 450,
         width: 350,
     }
 }));
@@ -73,13 +74,16 @@ const RegisterForm = (props) => {
                                label={'Confirm Password'}
                                type="password" validate={[required, passwordsMatch]}/>
                     </Grid>
+                    <Grid item xs={12}>
+                        <DropZone handleDrop={props.handleDrop} imageMaxSize={props.imageMaxSize}
+                                  validFormats={props.validFormats} multipleUpload={props.multipleUpload}/>
+                    </Grid>
+                    <Button fullWidth type={"submit"} variant="contained" color="primary"
+                            className={classes.button}>Register</Button>
+                    {props.isLoading &&
+                    <Loading/>
+                    }
                 </Grid>
-
-                <Button fullWidth type={"submit"} variant="contained" color="primary"
-                        className={classes.button}>Register</Button>
-                {props.isLoading &&
-                <Loading/>
-                }
             </form>
         </Paper>
     )

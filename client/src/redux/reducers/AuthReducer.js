@@ -129,10 +129,10 @@ export const logout = () => async (dispatch) => {
     }
 };
 
-export const register = (email, username, password, firstName, lastName) => async (dispatch) => {
+export const register = (formData) => async (dispatch) => {
     dispatch(setLoading(true));
     try {
-        const res = await authApi.register(email, username, password, firstName, lastName);
+        const res = await authApi.register(formData);
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));
     } catch (e) {
@@ -237,10 +237,10 @@ export const editProduct = (formData) => async (dispatch) => {
     }
 };
 
-export const postProduct = (product) => async (dispatch) => {
+export const postProduct = (formData) => async (dispatch) => {
     dispatch(setLoading(true));
     try {
-        const res = await authApi.addNewListing(product);
+        const res = await authApi.addNewListing(formData);
         dispatch(addToAuthedUserProducts(res.data.addedProduct));
         dispatch(setLoading(false));
         dispatch(setSuccessMsg(res.data.successMessage));

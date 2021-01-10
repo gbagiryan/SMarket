@@ -5,14 +5,21 @@ import {withAuthRedirect} from "../../HOCs/withAuthRedirect";
 import {EditProfileReduxForm} from "./EditProfileForm";
 import {editProfile} from "../../redux/reducers/AuthReducer";
 import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/appSelectors";
-import {EditProductReduxForm} from "../EditProduct/EditProductForm";
 
 const EditProfileContainer = (props) => {
+
+    const imageMaxSize = 1024 * 1024 * 10;
+    const validFormats = ['image/png', 'image/x-png', 'image/jpg', 'image/jpeg'];
+    const multipleUpload = false;
+
     const [profilePicture, setProfilePicture] = useState('')
 
-    const handleAddedPhoto = (event) => {
-        if (event.target.files.length) {
-            setProfilePicture(event.target.files[0])
+    const handleDrop = (files, rejectedFiles) => {
+        if (rejectedFiles && rejectedFiles.length > 0) {
+            alert(rejectedFiles[0].errors[0].message)
+        }
+        if (files && files.length > 0) {
+            setProfilePicture(files[0])
         }
     }
 
@@ -28,8 +35,9 @@ const EditProfileContainer = (props) => {
     }
     return (
         <div>
-            <EditProfileReduxForm onSubmit={handleEdit} handleAddedPhoto={handleAddedPhoto}
-                                  isLoading={props.isLoading} errorMsg={props.errorMsg} successMsg={props.successMsg}/>
+            <EditProfileReduxForm onSubmit={handleEdit} isLoading={props.isLoading} errorMsg={props.errorMsg}
+                                  successMsg={props.successMsg} handleDrop={handleDrop} imageMaxSize={imageMaxSize}
+                                  validFormats={validFormats} multipleUpload={multipleUpload}/>
         </div>
     )
 };

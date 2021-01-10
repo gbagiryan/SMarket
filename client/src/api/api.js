@@ -19,8 +19,8 @@ export const authApi = {
     async login(email, password) {
         return await Axios.post('/api/auth/login', {email, password});
     },
-    async register(email, username, password, firstName, lastName) {
-        return await Axios.post('/api/auth/register', {email, username, password, firstName, lastName});
+    async register(formData) {
+        return await Axios.post('/api/auth/register', formData);
     },
     async verifyAuth() {
         return await Axios.get('/api/auth/verifyAuth');
@@ -31,8 +31,8 @@ export const authApi = {
     async editProfile(formData) {
         return await Axios.patch(`/api/auth/edit_profile`, formData);
     },
-    async addNewListing(product) {
-        return await Axios.post(`/api/product/add_new_product/`, product);
+    async addNewListing(formData) {
+        return await Axios.post(`/api/product/add_new_product/`, formData);
     },
     async deleteProduct(productId) {
         return await Axios.delete(`/api/product/delete_product/${productId}`);
