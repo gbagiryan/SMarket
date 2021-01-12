@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from "react-redux";
 import {compose} from "redux";
 import {withAuthRedirect} from "../../HOCs/withAuthRedirect";
@@ -8,17 +8,28 @@ import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/ap
 
 const PostProductContainer = (props) => {
 
+    const [productPictures, setProductPictures] = useState([]);
+    const [productThumbs, setProductThumbs] = useState([]);
+
+    useEffect(() => {
+        setProductThumbs(productPictures.map(pic => URL.createObjectURL(pic)));
+    }, [productPictures]);
+
     const imageMaxSize = 1024 * 1024 * 10;
     const validFormats = ['image/png', 'image/x-png', 'image/jpg', 'image/jpeg'];
     const multipleUpload = true;
+    const maxFilesToShow = 6;
+    let maxFiles = 6 - productPictures.length;
+    const dropZoneText = 'Please Drop/Select from 1 to 6 images';
 
-    const [productPictures, setProductPictures] = useState()
-
+    const handleClick = (index) => {
+        setProductPictures(productPictures.filter(img => productPictures.indexOf(img) !== index));
+    }
     const handleDrop = (files, rejectedFiles) => {
         if (rejectedFiles && rejectedFiles.length > 0) {
             alert(rejectedFiles[0].errors[0].message)
         } else if (files && files.length > 0) {
-            setProductPictures(files)
+            setProductPictures([...productPictures, ...files]);
         }
     }
 
@@ -28,8 +39,7 @@ const PostProductContainer = (props) => {
         formData.append('description', form.description);
         formData.append('price', form.price);
         formData.append('category', form.category);
-        productPictures.map(pic=> formData.append('productPictures', pic));
-        // formData.append('productPictures', productPictures);
+        productPictures.map(pic => formData.append('productPictures', pic));
 
         props.postProduct(formData);
     }
@@ -41,7 +51,9 @@ const PostProductContainer = (props) => {
                 <PostProductReduxForm onSubmit={handlePostProduct}
                                       isLoading={props.isLoading} errorMsg={props.errorMsg}
                                       successMsg={props.successMsg} handleDrop={handleDrop} imageMaxSize={imageMaxSize}
-                                      validFormats={validFormats} multipleUpload={multipleUpload}/>
+                                      validFormats={validFormats} multipleUpload={multipleUpload} maxFiles={maxFiles}
+                                      thumbs={productThumbs} dropZoneText={dropZoneText}
+                                      maxFilesToShow={maxFilesToShow} handleClick={handleClick}/>
             </div>
         </div>
     )

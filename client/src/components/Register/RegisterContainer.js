@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from "react-redux";
 import {register} from "../../redux/reducers/AuthReducer";
 import {RegisterReduxForm} from "./RegisterForm";
@@ -8,14 +8,21 @@ import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/ap
 
 const RegisterContainer = (props) => {
 
+    const [profilePictures, setProfilePictures] = useState([])
+    const [profileThumbs, setProfileThumbs] = useState([])
+
+    useEffect(() => {
+        setProfileThumbs(profilePictures.map(pic => URL.createObjectURL(pic)));
+    }, [profilePictures]);
+
     const imageMaxSize = 1024 * 1024 * 10;
     const validFormats = ['image/png', 'image/x-png', 'image/jpg', 'image/jpeg'];
     const multipleUpload = false;
+    const dropZoneText = 'Please Drop/Select image here';
+    const maxFilesToShow = 1;
 
-    const [profilePicture, setProfilePicture] = useState('')
-
-    if (props.isAuthed) {
-        return <Redirect to={'/profile'}/>
+    const handleClick = (index) => {
+        setProfilePictures(profilePictures.filter(img => profilePictures.indexOf(img) !== index));
     }
 
     const handleDrop = (files, rejectedFiles) => {
@@ -23,7 +30,7 @@ const RegisterContainer = (props) => {
             alert(rejectedFiles[0].errors[0].message)
         }
         if (files && files.length > 0) {
-            setProfilePicture(files[0])
+            setProfilePictures([...profilePictures, ...files])
         }
     }
 
@@ -34,16 +41,19 @@ const RegisterContainer = (props) => {
         formData.append('username', form.username);
         formData.append('email', form.email);
         formData.append('password', form.password);
-        formData.append('profilePicture', profilePicture);
+        formData.append('profilePicture', profilePictures[0]);
 
         props.register(formData)
     }
 
     return (
-        <RegisterReduxForm onSubmit={handleRegisterSubmit} isLoading={props.isLoading}
-                           errorMsg={props.errorMsg} successMsg={props.successMsg} handleDrop={handleDrop}
-                           imageMaxSize={imageMaxSize} validFormats={validFormats}
-                           multipleUpload={multipleUpload}/>
+        props.isAuthed
+            ? <Redirect to={'/profile'}/>
+            : <RegisterReduxForm onSubmit={handleRegisterSubmit} isLoading={props.isLoading}
+                                 errorMsg={props.errorMsg} successMsg={props.successMsg} handleDrop={handleDrop}
+                                 imageMaxSize={imageMaxSize} validFormats={validFormats}
+                                 multipleUpload={multipleUpload} thumbs={profileThumbs}
+                                 maxFilesToShow={maxFilesToShow} dropZoneText={dropZoneText} handleClick={handleClick}/>
     )
 };
 

@@ -8,10 +8,10 @@ const product_post = async (req, res) => {
         const files = req.files;
 
         let uploadedFilesArr = [];
-        if (files && files.length > 0 && files.length <= 5) {
+        if (files && files.length > 0 && files.length <= 6) {
             uploadedFilesArr=files.map(file => `/public/${file.filename}`);
         } else {
-            return res.status(400).json({errorMessage: 'Please upload from 1 to 5 images'});
+            return res.status(400).json({errorMessage: 'Please upload from 1 to 6 images'});
         }
 
         const product = new Product({
@@ -112,9 +112,17 @@ const product_delete = async (req, res) => {
 const product_patch = async (req, res) => {
     try {
         const {productName, description, price, category, productId} = req.body;
-        const file = req.file;
+        const files = req.files;
+
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).json({errorMessage: 'not a valid product id'});
+        }
+
+        let uploadedFilesArr = [];
+        if (files && files.length > 0 && files.length <= 6) {
+            uploadedFilesArr=files.map(file => `/public/${file.filename}`);
+        } else {
+            return res.status(400).json({errorMessage: 'Please upload from 1 to 6 images'});
         }
 
         const productToEdit = await Product.findById(productId);
@@ -131,7 +139,8 @@ const product_patch = async (req, res) => {
             description,
             price,
             category,
-            productPicture: file ? '/public/' + file.filename : null
+            productPictures: uploadedFilesArr.length > 0 ? uploadedFilesArr : null,
+            productMainPicture: uploadedFilesArr.length > 0 ? uploadedFilesArr[0] : null
         }, {new: true})
 
         res.status(200).json({successMessage: 'Product edited', updatedProduct});

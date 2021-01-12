@@ -50,11 +50,13 @@ const PostProductForm = (props) => {
                                validate={[required]}/>
                     </Grid>
                     <Grid item xs={12}>
-                        <Field fullWidth placeholder={'Product Description'} name={'description'} component={renderTextField}
+                        <Field fullWidth placeholder={'Product Description'} name={'description'}
+                               component={renderTextField}
                                validate={[required, minLength10, maxLength100]}/>
                     </Grid>
                     <Grid item xs={12}>
-                        <Field fullWidth placeholder={'Product Price'} name={'price'} component={renderTextField} type="number"
+                        <Field fullWidth placeholder={'Product Price'} name={'price'} component={renderTextField}
+                               type="number"
                                validate={[required]}/>
                     </Grid>
                     <Grid item xs={12}>
@@ -63,9 +65,13 @@ const PostProductForm = (props) => {
                     </Grid>
                     <Grid item xs={12}>
                         <DropZone handleDrop={props.handleDrop} imageMaxSize={props.imageMaxSize}
-                                  validFormats={props.validFormats} multipleUpload={props.multipleUpload}/>
+                                  validFormats={props.validFormats} multipleUpload={props.multipleUpload}
+                                  maxFiles={props.maxFiles} dropZoneText={props.dropZoneText}
+                                  thumbs={props.thumbs} handleClick={props.handleClick}
+                                  maxFilesToShow={props.maxFilesToShow}/>
                     </Grid>
-                    <Button fullWidth type={"submit"} variant="contained" color="primary" className={classes.button}>Add</Button>
+                    <Button fullWidth type={"submit"} variant="contained" color="primary"
+                            className={classes.button}>Add</Button>
                     {props.isLoading &&
                     <Loading/>
                     }

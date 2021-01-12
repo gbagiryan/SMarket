@@ -8,6 +8,7 @@ import Paper from "@material-ui/core/Paper";
 import Loading from "../Common/Loading/Loading";
 import {Error, Success} from "../Common/Messages/Messages";
 import {DropZone} from "../Common/DropZone/DropZone";
+import {PostProductReduxForm} from "../PostProduct/PostProductForm";
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -76,7 +77,9 @@ const RegisterForm = (props) => {
                     </Grid>
                     <Grid item xs={12}>
                         <DropZone handleDrop={props.handleDrop} imageMaxSize={props.imageMaxSize}
-                                  validFormats={props.validFormats} multipleUpload={props.multipleUpload}/>
+                                  validFormats={props.validFormats} multipleUpload={props.multipleUpload}
+                                  dropZoneText={props.dropZoneText} thumbs={props.thumbs}
+                                  handleClick={props.handleClick} maxFilesToShow={props.maxFilesToShow}/>
                     </Grid>
                     <Button fullWidth type={"submit"} variant="contained" color="primary"
                             className={classes.button}>Register</Button>

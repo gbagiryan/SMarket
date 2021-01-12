@@ -63,7 +63,10 @@ const EditProduct = (props) => {
                     </Grid>
                     <Grid item xs={12}>
                         <DropZone handleDrop={props.handleDrop} imageMaxSize={props.imageMaxSize}
-                                  validFormats={props.validFormats} multipleUpload={props.multipleUpload}/>
+                                  validFormats={props.validFormats} multipleUpload={props.multipleUpload}
+                                  maxFiles={props.maxFiles} dropZoneText={props.dropZoneText}
+                                  thumbs={props.thumbs} handleClick={props.handleClick}
+                                  maxFilesToShow={props.maxFilesToShow}/>
                     </Grid>
                     <Button fullWidth type={"submit"} variant="contained" color="primary"
                             className={classes.button}>Save</Button>

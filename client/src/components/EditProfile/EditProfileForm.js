@@ -30,7 +30,7 @@ const EditProfile = (props) => {
 
     return (
         <Paper className={classes.paperStyle}>
-            <form className={classes.form}  onSubmit={props.handleSubmit}>
+            <form className={classes.form} onSubmit={props.handleSubmit}>
                 <Grid container spacing={2}>
                     {props.errorMsg &&
                     <Grid item xs={12}>
@@ -60,7 +60,9 @@ const EditProfile = (props) => {
                     </Grid>
                     <Grid item xs={12}>
                         <DropZone handleDrop={props.handleDrop} imageMaxSize={props.imageMaxSize}
-                                  validFormats={props.validFormats} multipleUpload={props.multipleUpload}/>
+                                  validFormats={props.validFormats} multipleUpload={props.multipleUpload}
+                                  dropZoneText={props.dropZoneText} thumbs={props.thumbs}
+                                  handleClick={props.handleClick} maxFilesToShow={props.maxFilesToShow}/>
                     </Grid>
                     <Button fullWidth type={"submit"} variant="contained" color="primary"
                             className={classes.button}>Edit</Button>
