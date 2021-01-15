@@ -1,12 +1,19 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {connect} from "react-redux";
 import {getAuthedUserCart, getAuthedUserData, getAuthedUserProducts} from "../../redux/selectors/authSelectors";
 import {compose} from "redux";
 import {withAuthRedirect} from "../../HOCs/withAuthRedirect";
 import {AuthedUserProfile} from "./AuthedUserProfile";
 import {deleteFromCart, deleteProduct} from "../../redux/reducers/AuthReducer";
+import {clearMessages} from "../../redux/reducers/AppReducer";
+import {getErrorMsg} from "../../redux/selectors/appSelectors";
 
 const AuthedUserProfileContainer = (props) => {
+    useEffect(() => {
+        return () => {
+            props.clearMessages()
+        }
+    }, []);
 
     const handleDeleteProduct = (productId) => {
         props.deleteProduct(productId);
@@ -22,6 +29,7 @@ const AuthedUserProfileContainer = (props) => {
                                authedUserCart={props.authedUserCart}
                                handleDeleteProduct={handleDeleteProduct}
                                handleDeleteFromCart={handleDeleteFromCart}
+                               errorMsg={props.errorMsg}
             />
         </div>
     );
@@ -30,12 +38,14 @@ const AuthedUserProfileContainer = (props) => {
 const mapStateToProps = (state) => ({
     profile: getAuthedUserData(state),
     authedUserProducts: getAuthedUserProducts(state),
+    errorMsg: getErrorMsg(state),
     authedUserCart: getAuthedUserCart(state)
 });
 
 const actionCreators = {
     deleteProduct,
-    deleteFromCart
+    deleteFromCart,
+    clearMessages
 };
 
 export default compose(

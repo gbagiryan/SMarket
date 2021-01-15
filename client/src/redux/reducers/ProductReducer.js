@@ -4,6 +4,7 @@ import {setErrorMsg, setLoading} from "./AppReducer";
 const PRODUCT_SET_PRODUCT = 'PRODUCT_SET_PRODUCT';
 const PRODUCT_SET_PRODUCT_LIST = 'PRODUCT_SET_PRODUCT_LIST';
 const PRODUCT_LOAD_MORE_PRODUCTS_TO_LIST = 'PRODUCT_LOAD_MORE_PRODUCTS_TO_LIST';
+const PRODUCT_CLEAR_DATA = 'PRODUCT_CLEAR_DATA';
 
 const initialState = {
     product: null,
@@ -30,6 +31,13 @@ export const ProductReducer = (state = initialState, action) => {
                 productList: [...state.productList, ...action.productList],
                 productsCount: action.productsCount
             }
+        case PRODUCT_CLEAR_DATA:
+            return {
+                ...state,
+                product: null,
+                productList: [],
+                productsCount: 0
+            }
         default:
             return state;
     }
@@ -42,6 +50,7 @@ const loadMoreProductsToList = (productList, productsCount) => ({
     productList,
     productsCount
 });
+export const productClearData = () =>({type: PRODUCT_CLEAR_DATA});
 
 export const requestProduct = (productId) => async (dispatch) => {
     dispatch(setLoading(true));

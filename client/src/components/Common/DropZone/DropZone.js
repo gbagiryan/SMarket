@@ -3,6 +3,7 @@ import Dropzone from "react-dropzone";
 import React from "react";
 import {makeStyles} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 const useStyles = makeStyles(theme => ({
     paperStyle: {
@@ -26,10 +27,27 @@ const useStyles = makeStyles(theme => ({
         outline: 'none',
         transition: 'border .24s ease-in-out'
     },
-    img: {
+    imageContainer: {
+        position: 'relative',
+        margin: theme.spacing(1),
         width: 150,
         height: 100,
-        margin: theme.spacing(1)
+        display: "inline-block",
+    },
+    img: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover'
+    },
+    cancelIcon: {
+        color: 'red',
+        backgroundColor: 'black',
+        borderRadius: '50%',
+        cursor: 'pointer',
+        fontSize: 20,
+        position: "absolute",
+        top: 0,
+        right: 0
     }
 }));
 
@@ -55,9 +73,11 @@ export const DropZone = (props) => {
             }
             <Grid item xs={12}>
                 {props.thumbs && props.thumbs.map(thumb =>
-                    <img onClick={() => props.handleClick(props.thumbs.indexOf(thumb))}
-                         src={thumb}
-                         alt="preview" className={classes.img}/>
+                    <div className={classes.imageContainer}>
+                        <img src={thumb} alt="preview" className={classes.img}/>
+                        <HighlightOffIcon onClick={() => props.handleClick(props.thumbs.indexOf(thumb))}
+                                          className={classes.cancelIcon}/>
+                    </div>
                 )}
             </Grid>
         </>

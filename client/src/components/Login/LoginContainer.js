@@ -1,12 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {LoginReduxForm} from "./LoginForm";
 import {connect} from "react-redux";
 import {login} from "../../redux/reducers/AuthReducer";
 import {Redirect} from "react-router-dom";
 import {getIsAuthed} from "../../redux/selectors/authSelectors";
 import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/appSelectors";
+import {clearMessages} from "../../redux/reducers/AppReducer";
 
 const LoginContainer = (props) => {
+    useEffect(() => {
+        return () => {
+            props.clearMessages()
+        }
+    }, []);
 
     if (props.isAuthed) {
         return <Redirect to={'/profile'}/>
@@ -17,7 +23,8 @@ const LoginContainer = (props) => {
     }
 
     return (
-        <LoginReduxForm onSubmit={onLoginSubmit} isLoading={props.isLoading} errorMsg={props.errorMsg} successMsg={props.successMsg}/>
+        <LoginReduxForm onSubmit={onLoginSubmit} isLoading={props.isLoading} errorMsg={props.errorMsg}
+                        successMsg={props.successMsg}/>
     )
 };
 
@@ -29,7 +36,8 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
-    login
+    login,
+    clearMessages
 }
 
 export default connect(mapStateToProps, actionCreators)(LoginContainer);

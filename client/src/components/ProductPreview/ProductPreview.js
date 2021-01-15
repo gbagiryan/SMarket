@@ -1,14 +1,13 @@
 import React from 'react';
-import {Link, NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {makeStyles} from '@material-ui/core/styles';
-import {CardActionArea, CardContent, CardMedia, Typography, CardHeader, ListItem} from '@material-ui/core';
+import {CardActionArea, CardContent, CardMedia, Typography, CardHeader} from '@material-ui/core';
 
 const useStyles = makeStyles({
     media: {
         height: 140,
     },
 });
-
 const ProductPreview = (props) => {
     const classes = useStyles();
 
@@ -34,14 +33,6 @@ const ProductPreview = (props) => {
                 </Typography>
             </CardContent>
         </div>
-
-        // <div>
-        //     <NavLink to={`/product/${props.product._id}`}>{props.product.productName}</NavLink>
-        //     <div>{props.product.description}</div>
-        //     <div>{props.product.price}</div>
-        //     <div>{props.product.category}</div>
-        //     <NavLink to={`/user/${props.product.user.profileId}`}>{props.product.user.username}</NavLink>
-        // </div>
     )
 };
 

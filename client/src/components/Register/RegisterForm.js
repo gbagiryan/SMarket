@@ -8,7 +8,6 @@ import Paper from "@material-ui/core/Paper";
 import Loading from "../Common/Loading/Loading";
 import {Error, Success} from "../Common/Messages/Messages";
 import {DropZone} from "../Common/DropZone/DropZone";
-import {PostProductReduxForm} from "../PostProduct/PostProductForm";
 
 const useStyles = makeStyles(theme => ({
     form: {

@@ -5,6 +5,7 @@ import {withAuthRedirect} from "../../HOCs/withAuthRedirect";
 import {PostProductReduxForm} from "./PostProductForm";
 import {postProduct} from "../../redux/reducers/AuthReducer";
 import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/appSelectors";
+import {clearMessages} from "../../redux/reducers/AppReducer";
 
 const PostProductContainer = (props) => {
 
@@ -13,6 +14,9 @@ const PostProductContainer = (props) => {
 
     useEffect(() => {
         setProductThumbs(productPictures.map(pic => URL.createObjectURL(pic)));
+        return () => {
+            props.clearMessages()
+        }
     }, [productPictures]);
 
     const imageMaxSize = 1024 * 1024 * 10;
@@ -66,7 +70,8 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
-    postProduct
+    postProduct,
+    clearMessages
 }
 
 export default compose(

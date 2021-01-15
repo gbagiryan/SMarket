@@ -5,6 +5,7 @@ import {RegisterReduxForm} from "./RegisterForm";
 import {getIsAuthed} from "../../redux/selectors/authSelectors";
 import {Redirect} from "react-router-dom";
 import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/appSelectors";
+import {clearMessages} from "../../redux/reducers/AppReducer";
 
 const RegisterContainer = (props) => {
 
@@ -13,6 +14,9 @@ const RegisterContainer = (props) => {
 
     useEffect(() => {
         setProfileThumbs(profilePictures.map(pic => URL.createObjectURL(pic)));
+        return () => {
+            props.clearMessages()
+        }
     }, [profilePictures]);
 
     const imageMaxSize = 1024 * 1024 * 10;
@@ -65,7 +69,8 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
-    register
+    register,
+    clearMessages
 }
 
 export default connect(mapStateToProps, actionCreators)(RegisterContainer);

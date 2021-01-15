@@ -1,38 +1,50 @@
 import React from 'react';
 import Loading from "../Common/Loading/Loading";
 import ProductPreview from "../ProductPreview/ProductPreview";
-import {Link, NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import {Button, Card} from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import {makeStyles} from '@material-ui/core/styles';
+import Paper from "@material-ui/core/Paper";
+import {Error} from "../Common/Messages/Messages";
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles(theme => ({
+    paper: {
+        minHeight: 200,
+        width: 300,
+        padding: theme.spacing(2)
+    }
+}));
 
 export const AuthedUserProfile = (props) => {
 
     const classes = useStyles();
-
+    if (props.errorMsg) {
+        return <Error errorMsg={props.errorMsg}/>
+    }
     if (!props.profile) {
         return <Loading/>
     }
     return (
         <div>
-            <div>
-                <h1>{props.profile.username}'s Profile</h1>
+            <Paper className={classes.paper}>
+                <h2>{props.profile.username}</h2>
                 <p>{props.profile.email}</p>
                 <p>{props.profile.username}</p>
                 <p>{props.profile.firstName} {props.profile.lastName}</p>
-                <NavLink to={'/edit_profile'}>Edit</NavLink>
-            </div>
+                <Button component={Link} to={`/edit_profile`} variant="contained"
+                        color="primary" className={classes.button}
+                        endIcon={<EditIcon/>}>Edit Profile</Button>
+            </Paper>
             <div>
                 <h1>My products</h1>
                 <Grid container spacing={2}>
                     {props.authedUserProducts.length
                         ? props.authedUserProducts.map(product =>
                             <Grid item xs={12} sm={6} md={4} lg={3}>
-                                <Card>
+                                <Card elevation={4}>
                                     <Button onClick={() => props.handleDeleteProduct(product._id)}
                                             variant="contained"
                                             color="secondary"
@@ -53,7 +65,7 @@ export const AuthedUserProfile = (props) => {
                     {props.authedUserCart.length
                         ? props.authedUserCart.map(product =>
                             <Grid item xs={12} sm={6} md={4} lg={3}>
-                                <Card>
+                                <Card elevation={4}>
                                     <Button onClick={() => props.handleDeleteFromCart(product._id)}
                                             variant="contained"
                                             color="secondary"

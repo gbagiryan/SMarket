@@ -37,6 +37,7 @@ export const AppReducer = (state = initialState, action) => {
             }
         case CLEAR_MESSAGES:
             return {
+                ...state,
                 successMsg: '',
                 errorMsg: '',
             };

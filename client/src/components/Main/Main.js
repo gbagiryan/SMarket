@@ -22,7 +22,7 @@ export const Main = (props) => {
             <Grid container spacing={2}>
                 {props.productList.map(product =>
                     <Grid item xs={12} sm={6} md={4} lg={3}>
-                        <Card>
+                        <Card elevation={4}>
                             {props.isAuthed &&
                             <Button onClick={() => props.handleAddToCart(product._id)}
                                     variant="contained"
@@ -41,8 +41,8 @@ export const Main = (props) => {
                     : props.errorMsg
                         ? <Error errorMsg={props.errorMsg}/>
                         : (props.productsCount - props.productList.length > 0)
-                            ? <button onClick={props.loadMore}>Load More</button>
-                            : <h2>no more products to show</h2>}
+                        && <button onClick={props.loadMore}>Load More</button>
+                }
             </div>
         </div>
     )

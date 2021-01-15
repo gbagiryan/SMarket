@@ -6,6 +6,7 @@ import {getProduct} from "../../redux/selectors/productSelectors";
 import {getIsAuthed} from "../../redux/selectors/authSelectors";
 import {getErrorMsg, getIsLoading} from "../../redux/selectors/appSelectors";
 import {addToCart} from "../../redux/reducers/AuthReducer";
+import {clearMessages} from "../../redux/reducers/AppReducer";
 
 const ProductContainer = React.memo((props) => {
 
@@ -13,6 +14,9 @@ const ProductContainer = React.memo((props) => {
         let productId = props.match.params.productId;
         if (productId) {
             props.requestProduct(productId);
+        }
+        return () => {
+            props.clearMessages()
         }
     }, [props.match.params]);
 
@@ -37,7 +41,8 @@ const mapStateToProps = (state) => ({
 
 const actionCreators = {
     requestProduct,
-    addToCart
+    addToCart,
+    clearMessages
 };
 
 export default connect(mapStateToProps, actionCreators)(ProductContainer);

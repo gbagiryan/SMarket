@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {Main} from "./Main";
 import {connect} from "react-redux";
-import {requestProductList} from "../../redux/reducers/ProductReducer";
+import {productClearData, requestProductList} from "../../redux/reducers/ProductReducer";
 import {getProductList, getProductsCount} from "../../redux/selectors/productSelectors";
 import {getIsAuthed} from "../../redux/selectors/authSelectors";
 import {getErrorMsg, getIsLoading} from "../../redux/selectors/appSelectors";
 import {addToCart} from "../../redux/reducers/AuthReducer";
+import {clearMessages} from "../../redux/reducers/AppReducer";
 
 const MainContainer = (props) => {
 
@@ -15,6 +16,11 @@ const MainContainer = (props) => {
 
     useEffect(() => {
         props.requestProductList(Skip, Limit);
+
+        return () => {
+            props.productClearData()
+            props.clearMessages()
+        }
     }, []);
 
     const loadMore = () => {
@@ -51,7 +57,9 @@ const mapStateToProps = (state) => ({
 
 const actionCreators = {
     requestProductList,
-    addToCart
+    addToCart,
+    productClearData,
+    clearMessages
 };
 
 export default connect(mapStateToProps, actionCreators)(MainContainer);

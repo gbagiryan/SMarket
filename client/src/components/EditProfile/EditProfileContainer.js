@@ -5,7 +5,7 @@ import {withAuthRedirect} from "../../HOCs/withAuthRedirect";
 import {EditProfileReduxForm} from "./EditProfileForm";
 import {editProfile} from "../../redux/reducers/AuthReducer";
 import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/appSelectors";
-import {RegisterReduxForm} from "../Register/RegisterForm";
+import {clearMessages} from "../../redux/reducers/AppReducer";
 
 const EditProfileContainer = (props) => {
 
@@ -14,6 +14,9 @@ const EditProfileContainer = (props) => {
 
     useEffect(() => {
         setProfileThumbs(profilePictures.map(pic => URL.createObjectURL(pic)));
+        return () => {
+            props.clearMessages()
+        }
     }, [profilePictures]);
 
     const imageMaxSize = 1024 * 1024 * 10;
@@ -50,7 +53,8 @@ const EditProfileContainer = (props) => {
             <EditProfileReduxForm onSubmit={handleEdit} isLoading={props.isLoading} errorMsg={props.errorMsg}
                                   successMsg={props.successMsg} handleDrop={handleDrop} imageMaxSize={imageMaxSize}
                                   validFormats={validFormats} multipleUpload={multipleUpload} thumbs={profileThumbs}
-                                  maxFilesToShow={maxFilesToShow} dropZoneText={dropZoneText} handleClick={handleClick}/>
+                                  maxFilesToShow={maxFilesToShow} dropZoneText={dropZoneText}
+                                  handleClick={handleClick}/>
         </div>
     )
 };
@@ -62,7 +66,8 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
-    editProfile
+    editProfile,
+    clearMessages
 };
 
 export default compose(

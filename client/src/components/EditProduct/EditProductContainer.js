@@ -7,6 +7,7 @@ import {getProduct} from "../../redux/selectors/productSelectors";
 import {requestProduct} from "../../redux/reducers/ProductReducer";
 import {editProduct} from "../../redux/reducers/AuthReducer";
 import {getErrorMsg, getIsLoading, getSuccessMsg} from "../../redux/selectors/appSelectors";
+import {clearMessages} from "../../redux/reducers/AppReducer";
 
 const EditProductContainer = (props) => {
 
@@ -14,6 +15,9 @@ const EditProductContainer = (props) => {
         let productId = props.match.params.productId;
         if (productId) {
             props.requestProduct(productId);
+        }
+        return () => {
+            props.clearMessages()
         }
     }, [props.match.params]);
 
@@ -75,7 +79,8 @@ const mapStateToProps = (state) => ({
 
 const actionCreators = {
     requestProduct,
-    editProduct
+    editProduct,
+    clearMessages
 };
 
 export default compose(
